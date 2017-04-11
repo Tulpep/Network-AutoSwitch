@@ -27,7 +27,8 @@ namespace Tulpep.NetworkAutoSwitch.Service
                             Console.WriteLine("Service Installed");
                             const string serviceName = "NetworkAutoSwitch";
                             int timeout = 5000;
-                            Console.WriteLine(String.Format("Starting Windows Service {0}. Timeout of {1} ms", serviceName, timeout));
+                            Console.WriteLine(String.Format("Starting Windows Service {0} with timeout of {1} ms", serviceName, timeout));
+                            Console.WriteLine("Service running");
                             StartService(serviceName, timeout);
                             return 0;
                         case "--uninstall":
