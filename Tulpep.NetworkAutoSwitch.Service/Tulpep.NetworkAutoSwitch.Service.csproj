@@ -5,10 +5,10 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{C21510B8-4125-4501-91F8-19A244027157}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Tulpep.NetworkAutoSwitch.Service</RootNamespace>
-    <AssemblyName>Tulpep.NetworkAutoSwitch.Service</AssemblyName>
+    <AssemblyName>NetworkAutoSwitch</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -33,6 +33,13 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <PropertyGroup />
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Configuration.Install" />
@@ -45,12 +52,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ManageNetworkState.cs" />
+    <Compile Include="DetectNetworkChanges.cs" />
     <Compile Include="NetworkAutoSwitch.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="NetworkAutoSwitch.Designer.cs">
       <DependentUpon>NetworkAutoSwitch.cs</DependentUpon>
     </Compile>
+    <Compile Include="NetworkState.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ProjectInstaller.cs">
       <SubType>Component</SubType>
@@ -62,6 +72,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="app.manifest" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="NetworkAutoSwitch.resx">
@@ -70,12 +81,6 @@
     <EmbeddedResource Include="ProjectInstaller.resx">
       <DependentUpon>ProjectInstaller.cs</DependentUpon>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Tulpep.NetworkAutoSwitch.Logic\Tulpep.NetworkAutoSwitch.Logic.csproj">
-      <Project>{a63bf6a6-0a68-44e4-a35a-994407f173de}</Project>
-      <Name>Tulpep.NetworkAutoSwitch.Logic</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -39,7 +39,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DetectNetworkChanges.cs" />
     <Compile Include="ManageNetworkState.cs" />
     <Compile Include="NetworkState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,5 +1,4 @@
 ﻿using System.ServiceProcess;
-using Tulpep.NetworkAutoSwitch.Logic;
 
 namespace Tulpep.NetworkAutoSwitch.Service
 {
@@ -18,7 +17,7 @@ namespace Tulpep.NetworkAutoSwitch.Service
 
         protected override void OnStop()
         {
-            _detectNetworkChanges.ShuttingDown();
+            _detectNetworkChanges.StopNow();
         }
     }
 }

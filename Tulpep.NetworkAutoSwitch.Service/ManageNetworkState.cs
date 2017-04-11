@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net.NetworkInformation;
 
-namespace Tulpep.NetworkAutoSwitch.Logic
+namespace Tulpep.NetworkAutoSwitch.Service
 {
     static class ManageNetworkState
     {

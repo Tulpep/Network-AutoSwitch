@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.NetworkInformation;
 
-namespace Tulpep.NetworkAutoSwitch.Logic
+namespace Tulpep.NetworkAutoSwitch.Service
 {
     public class DetectNetworkChanges
     {
@@ -16,10 +16,11 @@ namespace Tulpep.NetworkAutoSwitch.Logic
             ManageNetworkState.AnalyzeNow();
         }
 
-        public void ShuttingDown()
+        public void StopNow()
         {
             ManageNetworkState.EnableAllNics();
         }
 
     }
+
 }
