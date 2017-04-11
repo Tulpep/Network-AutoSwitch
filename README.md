@@ -1,10 +1,10 @@
-# Network-AutoSwitch  [![Build Status](https://ci.appveyor.com/api/projects/status/github/Tulpep/Network-AutoSwitch)]
+# Network-AutoSwitch  ![Build Status](https://ci.appveyor.com/api/projects/status/github/Tulpep/Network-AutoSwitch)
 
-Network AutoSwitch will automatically disable wired network adapters when a wireless connection is detected. Whe you disconnect from the wireless network it will enable wired adapters automatically.
+Network AutoSwitch will automatically disable wired network adapters when a wireless connection is detected. Whe you disconnect your computer from the wireless network it will enable wired adapters automatically. 
 
 ## [Download now](https://github.com/Tulpep/Network-AutoSwitch/releases/latest)
 
-Network AutoSwitch can run interative for your testing purposes but also can run as Windows Service. In Windows Service mode will work in background with not intervation to the final user. You can distribute it using Active Directory or your current deployment solution software.
+Network AutoSwitch run in interactive mode for your testing purposes but also can run as Windows Service. In Windows Service mode will work in background with not intervation to the final user. You can distribute it using Active Directory or your current deployment solution software.
 
 # How to use it
 Run using a command prompt with administative rights (require for enable or disable network connections dynamically) as:
