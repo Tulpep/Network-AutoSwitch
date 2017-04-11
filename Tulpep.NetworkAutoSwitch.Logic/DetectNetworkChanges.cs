@@ -3,9 +3,9 @@ using System.Net.NetworkInformation;
 
 namespace Tulpep.NetworkAutoSwitch.Logic
 {
-    class DetectNetworkChanges
+    public class DetectNetworkChanges
     {
-        private DetectNetworkChanges()
+        public DetectNetworkChanges()
         {
             ManageNetworkState.AnalyzeNow();
             NetworkChange.NetworkAddressChanged += new NetworkAddressChangedEventHandler(NetworkAddressChanged);

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Tulpep.NetworkAutoSwitch.Logic;
 
 namespace Tulpep.NetworkAutoSwitch.DebugConsole
 {
@@ -9,6 +7,9 @@ namespace Tulpep.NetworkAutoSwitch.DebugConsole
     {
         static void Main(string[] args)
         {
+            Console.WriteLine("Press any key to exit...");
+            new DetectNetworkChanges();
+            Console.ReadLine();
         }
     }
 }
