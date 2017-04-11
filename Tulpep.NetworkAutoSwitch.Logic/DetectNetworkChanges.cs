@@ -16,5 +16,10 @@ namespace Tulpep.NetworkAutoSwitch.Logic
             ManageNetworkState.AnalyzeNow();
         }
 
+        public void ShuttingDown()
+        {
+            ManageNetworkState.EnableAllNics();
+        }
+
     }
 }

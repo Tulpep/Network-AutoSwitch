@@ -16,7 +16,7 @@ namespace Tulpep.NetworkAutoSwitch.Service
             ServiceBase[] ServicesToRun;
             ServicesToRun = new ServiceBase[]
             {
-                new Service1()
+                new NetworkAutoSwitch()
             };
             ServiceBase.Run(ServicesToRun);
         }

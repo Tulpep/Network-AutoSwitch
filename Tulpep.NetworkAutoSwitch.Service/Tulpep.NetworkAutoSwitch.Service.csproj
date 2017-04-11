@@ -43,17 +43,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Service1.cs">
+    <Compile Include="NetworkAutoSwitch.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Service1.Designer.cs">
-      <DependentUpon>Service1.cs</DependentUpon>
+    <Compile Include="NetworkAutoSwitch.Designer.cs">
+      <DependentUpon>NetworkAutoSwitch.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="NetworkAutoSwitch.resx">
+      <DependentUpon>NetworkAutoSwitch.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Tulpep.NetworkAutoSwitch.Logic\Tulpep.NetworkAutoSwitch.Logic.csproj">
+      <Project>{a63bf6a6-0a68-44e4-a35a-994407f173de}</Project>
+      <Name>Tulpep.NetworkAutoSwitch.Logic</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

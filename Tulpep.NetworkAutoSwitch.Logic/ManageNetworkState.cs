@@ -30,6 +30,12 @@ namespace Tulpep.NetworkAutoSwitch.Logic
         }
 
 
+        public static void EnableAllNics()
+        {
+            ChangeNicState(_networkState.WirelessAdapters, true);
+            ChangeNicState(_networkState.WiredAdapters, true);
+        }
+
         private static void RefreshNetworkState()
         {
             NetworkInterface[] nics = NetworkInterface.GetAllNetworkInterfaces();

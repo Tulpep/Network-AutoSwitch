@@ -1,6 +1,6 @@
 ﻿namespace Tulpep.NetworkAutoSwitch.Service
 {
-    partial class Service1
+    partial class NetworkAutoSwitch
     {
         /// <summary> 
         /// Required designer variable.
@@ -28,8 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
-            this.ServiceName = "Service1";
+            // 
+            // NetworkAutoSwitch
+            // 
+            this.ServiceName = "Tulpep Network AutoSwitch Service";
+
         }
 
         #endregion

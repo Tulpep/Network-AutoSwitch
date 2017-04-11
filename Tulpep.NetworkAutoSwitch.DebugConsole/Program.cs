@@ -8,8 +8,9 @@ namespace Tulpep.NetworkAutoSwitch.DebugConsole
         static void Main(string[] args)
         {
             Console.WriteLine("Press any key to exit...");
-            new DetectNetworkChanges();
+            DetectNetworkChanges detectNetworkChanges = new DetectNetworkChanges();
             Console.ReadLine();
+            detectNetworkChanges.ShuttingDown();
         }
     }
 }
