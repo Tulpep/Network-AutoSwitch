@@ -23,9 +23,9 @@ assembly_info:
 
 environment:
   sign_tool: 'C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Bin\signtool.exe'
-  artifact_path: 'C:\projects\sdelete-gui\SDelete-Gui\SDelete-Gui\bin\Release\SDelete-Gui.exe'
+  artifact_path: 'C:\projects\Network-AutoSwitch\Tulpep.NetworkAutoSwitch.Service\bin\Release\NetworkAutoSwitch.exe'
   timestamp_url: http://timestamp.verisign.com/scripts/timstamp.dll
-  pfx_file: 'C:\projects\sdelete-gui\Tulpep.pfx'
+  pfx_file: 'C:\projects\Network-AutoSwitch\Tulpep.pfx'
   pfx_password:
     secure: UQSh4nfF0+NlaV7tLriphA==
 
@@ -34,7 +34,7 @@ after_build:
   - cmd: '"%sign_tool%" sign /f "%pfx_file%" /p %pfx_password% /t %timestamp_url% "%artifact_path%"'
 
 artifacts:
-  - path: '**\bin\Release\NetworkAutoSwitch.exe'
+  - path: 'C:\projects\Network-AutoSwitch\Tulpep.NetworkAutoSwitch.Service\bin\Release\NetworkAutoSwitch.exe'
     name: NetworkAutoSwitch.exe
 
 deploy:
