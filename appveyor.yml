@@ -1,0 +1,50 @@
+shallow_clone: true
+
+# version format
+version: 1.0.{build}
+
+# Fix line endings in Windows. (runs before repo cloning)
+init:
+  - git config --global core.autocrlf input
+
+# Do not build on tags (GitHub only)
+skip_tags: true
+
+configuration: Release
+
+# Assembly Info
+assembly_info:
+  patch: true
+  file: AssemblyInfo.*
+  assembly_version: "{version}"
+  assembly_file_version: "{version}"
+  assembly_informational_version: "{version}"
+
+
+environment:
+  sign_tool: 'C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Bin\signtool.exe'
+  artifact_path: 'C:\projects\sdelete-gui\SDelete-Gui\SDelete-Gui\bin\Release\SDelete-Gui.exe'
+  timestamp_url: http://timestamp.verisign.com/scripts/timstamp.dll
+  pfx_file: 'C:\projects\sdelete-gui\Tulpep.pfx'
+  pfx_password:
+    secure: UQSh4nfF0+NlaV7tLriphA==
+
+
+after_build:
+  - cmd: '"%sign_tool%" sign /f "%pfx_file%" /p %pfx_password% /t %timestamp_url% "%artifact_path%"'
+
+artifacts:
+  - path: '**\bin\Release\NetworkAutoSwitch.exe'
+    name: NetworkAutoSwitch.exe
+
+deploy:
+  release: Network-AutoSwitch-v$(appveyor_build_version)
+  provider: GitHub
+  description: ''
+  auth_token:
+    secure: Q+20Xaui8ng5gVvoMIkb0g4F0oqMZFVOJo4SNRc+KVN91WkjLe5gTMkifCyDZTlE
+  artifact: NetworkAutoSwitch.exe
+  draft: false
+  prerelease: false
+  on:
+    branch: master
