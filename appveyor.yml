@@ -38,7 +38,7 @@ artifacts:
     name: NetworkAutoSwitch.exe
 
 deploy:
-  release: Network-AutoSwitch-v$(appveyor_build_version)
+  release: Network-AutoSwitch $(appveyor_build_version)
   provider: GitHub
   description: ''
   auth_token:
