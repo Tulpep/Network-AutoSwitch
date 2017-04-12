@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration.Install;
+using System.IO;
 using System.Reflection;
 using System.ServiceProcess;
 using System.Threading;
@@ -22,17 +23,21 @@ namespace Tulpep.NetworkAutoSwitch.Service
                 switch (string.Concat(args))
                 {
                     case "--install":
-                        ManagedInstallerClass.InstallHelper(new string[] { Assembly.GetExecutingAssembly().Location });
-                        Console.WriteLine("Service Installed");
+
+                        string pathOfService = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "NetworkAutoSwitch.exe");
+                        Logging.WriteMessage("Copying file to " + pathOfService);
+                        File.Copy(Assembly.GetExecutingAssembly().Location, pathOfService, true);
+                        ManagedInstallerClass.InstallHelper(new string[] { pathOfService });
+                        Logging.WriteMessage("Service Installed");
                         const string serviceName = "NetworkAutoSwitch";
                         int timeout = 5000;
-                        Console.WriteLine(String.Format("Starting Windows Service {0} with timeout of {1} ms", serviceName, timeout));
-                        Console.WriteLine("Service running");
+                        Logging.WriteMessage(String.Format("Starting Windows Service {0} with timeout of {1} ms", serviceName, timeout));
+                        Logging.WriteMessage("Service running");
                         StartService(serviceName, timeout);
                         return 0;
                     case "--uninstall":
                         ManagedInstallerClass.InstallHelper(new string[] { "/u", Assembly.GetExecutingAssembly().Location });
-                        Console.WriteLine("Service Uninstalled");
+                        Logging.WriteMessage("Service Uninstalled");
                         return 0;
                     default:
                         Console.WriteLine("Use parameters --install or --uninstall to use as Windows Service");
@@ -73,7 +78,6 @@ namespace Tulpep.NetworkAutoSwitch.Service
         {
             ServiceController service = new ServiceController(serviceName);
             TimeSpan timeout = TimeSpan.FromMilliseconds(timeoutMilliseconds);
-
             service.Start();
             service.WaitForStatus(ServiceControllerStatus.Running, timeout);
         }
