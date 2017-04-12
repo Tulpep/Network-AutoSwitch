@@ -15,53 +15,39 @@ namespace Tulpep.NetworkAutoSwitch.Service
         static int Main(string[] args)
         {
 
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomainUnhandledException;
+
             if (Environment.UserInteractive)
             {
-                string parameter = string.Concat(args);
-                try
+                switch (string.Concat(args))
                 {
-                    switch (parameter)
-                    {
-                        case "--install":
-                            ManagedInstallerClass.InstallHelper(new string[] { Assembly.GetExecutingAssembly().Location });
-                            Console.WriteLine("Service Installed");
-                            const string serviceName = "NetworkAutoSwitch";
-                            int timeout = 5000;
-                            Console.WriteLine(String.Format("Starting Windows Service {0} with timeout of {1} ms", serviceName, timeout));
-                            Console.WriteLine("Service running");
-                            StartService(serviceName, timeout);
-                            return 0;
-                        case "--uninstall":
-                            ManagedInstallerClass.InstallHelper(new string[] { "/u", Assembly.GetExecutingAssembly().Location });
-                            Console.WriteLine("Service Uninstalled");
-                            return 0;
-                        default:
-                            Console.WriteLine("Use parameters --install or --uninstall to use as Windows Service");
-                            var exitEvent = new ManualResetEvent(false);
-                            Console.CancelKeyPress += (sender, eventArgs) => {
-                                eventArgs.Cancel = true;
-                                exitEvent.Set();
-                            };
-                            try
-                            {
-                                DetectNetworkChanges detectNetworkChanges = new DetectNetworkChanges();
-                                Console.WriteLine("Press CTRL + C to exit...");
-                                exitEvent.WaitOne();
-                                detectNetworkChanges.StopNow();
-                                return 0;
-                            }
-                            catch (Exception ex)
-                            {
-                                Logging.WriteMessage(ex.ToString());
-                                return 1;
-                            }
+                    case "--install":
+                        ManagedInstallerClass.InstallHelper(new string[] { Assembly.GetExecutingAssembly().Location });
+                        Console.WriteLine("Service Installed");
+                        const string serviceName = "NetworkAutoSwitch";
+                        int timeout = 5000;
+                        Console.WriteLine(String.Format("Starting Windows Service {0} with timeout of {1} ms", serviceName, timeout));
+                        Console.WriteLine("Service running");
+                        StartService(serviceName, timeout);
+                        return 0;
+                    case "--uninstall":
+                        ManagedInstallerClass.InstallHelper(new string[] { "/u", Assembly.GetExecutingAssembly().Location });
+                        Console.WriteLine("Service Uninstalled");
+                        return 0;
+                    default:
+                        Console.WriteLine("Use parameters --install or --uninstall to use as Windows Service");
+                        var exitEvent = new ManualResetEvent(false);
+                        Console.CancelKeyPress += (sender, eventArgs) => {
+                            eventArgs.Cancel = true;
+                            exitEvent.Set();
+                        };
 
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Error: " + ex.Message);
-                    return 1;
+                        DetectNetworkChanges detectNetworkChanges = new DetectNetworkChanges();
+                        Console.WriteLine("Press CTRL + C to exit...");
+                        exitEvent.WaitOne();
+                        detectNetworkChanges.StopNow();
+                        return 0;
+
                 }
             }
             else
@@ -76,6 +62,13 @@ namespace Tulpep.NetworkAutoSwitch.Service
             }
 
         }
+
+        private static void CurrentDomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            Logging.WriteMessage(e.ExceptionObject.ToString());
+            Environment.Exit(1);
+        }
+
 
         private static void StartService(string serviceName, int timeoutMilliseconds)
         {
