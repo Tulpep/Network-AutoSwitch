@@ -39,7 +39,7 @@
             // 
             // serviceInstaller1
             // 
-            this.serviceInstaller1.Description = "For more information visit https://github.com/Tulpep/Network-AutoSwitch";
+            this.serviceInstaller1.Description = "For detailed information visit https://github.com/Tulpep/Network-AutoSwitch";
             this.serviceInstaller1.DisplayName = "Tulpep Network AutoSwitch Service";
             this.serviceInstaller1.ServiceName = "NetworkAutoSwitch";
             this.serviceInstaller1.StartType = System.ServiceProcess.ServiceStartMode.Automatic;
