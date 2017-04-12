@@ -25,7 +25,7 @@ NetworkAutoSwitch.exe --uninstall
 ```
 
 
-**This project is supported. Your issues will be handle for our team and we are open to your PRs!**
+**This project is supported. Your issues will be handle by our team and we are open to your PRs!**
 
 
 
