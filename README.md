@@ -4,7 +4,7 @@ Network AutoSwitch will automatically disable wired network adapters when a wire
 
 ## [Download now](https://github.com/Tulpep/Network-AutoSwitch/releases/latest)
 
-Network AutoSwitch run in interactive mode for your testing purposes but also can run as Windows Service. In Windows Service mode it will work in background without user interaction. You can distribute it using Active Directory or your current deployment software solution  and use it as part of your networking hardening strategy.
+Network AutoSwitch can un in interactive mode for your testing purposes but also can run as Windows Service. In Windows Service mode it will work in background without user interaction. You can distribute it using Active Directory or your current deployment software solution  and use it as part of your networking hardening strategy.
 
 # How to use it
 Run using a command prompt with administative rights (require for enable or disable network connections dynamically) as:
@@ -13,7 +13,7 @@ NetworkAutoSwitch.exe
 ```
 
 When using as a Windows Service it will work for all users in the machine, even it they dont have Windows administrative rights. It will start automatically with your System.
-To install it run as:
+To install it put in your System root and it run as:
 ```bash
 NetworkAutoSwitch.exe --install
 ```
