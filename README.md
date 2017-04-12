@@ -11,7 +11,7 @@ Run using a command prompt with administative rights as:
 ```bash
 NetworkAutoSwitch.exe
 ```
-Administrative rights are neccesary to enable or disable netword interfaces
+Administrative rights are neccesary to enable or disable network interfaces.
 
 When using as a Windows Service it will work for all users in the machine, even it they dont have Windows administrative rights. It will start automatically with your System.
 To install it put in your System root and run it from there as:
