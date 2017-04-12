@@ -42,11 +42,20 @@ namespace Tulpep.NetworkAutoSwitch.Service
                                 eventArgs.Cancel = true;
                                 exitEvent.Set();
                             };
-                            DetectNetworkChanges detectNetworkChanges = new DetectNetworkChanges();
-                            Console.WriteLine("Press CTRL + C to exit...");
-                            exitEvent.WaitOne();
-                            detectNetworkChanges.StopNow();
-                            return 0;
+                            try
+                            {
+                                DetectNetworkChanges detectNetworkChanges = new DetectNetworkChanges();
+                                Console.WriteLine("Press CTRL + C to exit...");
+                                exitEvent.WaitOne();
+                                detectNetworkChanges.StopNow();
+                                return 0;
+                            }
+                            catch (Exception ex)
+                            {
+                                Logging.WriteMessage(ex.ToString());
+                                return 1;
+                            }
+
                     }
                 }
                 catch (Exception ex)
