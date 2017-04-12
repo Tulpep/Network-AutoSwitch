@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Tulpep.NetworkAutoSwitch.Service")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("NetworkAutoSwitch")]
+[assembly: AssemblyDescription("Detailed information at https://github.com/Tulpep/Network-AutoSwitch")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Tulpep.NetworkAutoSwitch.Service")]
-[assembly: AssemblyCopyright("Copyright ©  2017")]
+[assembly: AssemblyCompany("Tulpep")]
+[assembly: AssemblyProduct("NetworkAutoSwitch")]
+[assembly: AssemblyCopyright("Copyright © 2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
