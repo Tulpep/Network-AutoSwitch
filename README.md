@@ -1,4 +1,4 @@
-# Network-AutoSwitch  ![Build Status](https://ci.appveyor.com/api/projects/status/github/Tulpep/Network-AutoSwitch)
+# Network AutoSwitch  ![Build Status](https://ci.appveyor.com/api/projects/status/github/Tulpep/Network-AutoSwitch)
 
 Network AutoSwitch will automatically disable wired network adapters when a wireless connection is detected. When you disconnect your computer from the wireless network it will enable wired adapters automatically. 
 
