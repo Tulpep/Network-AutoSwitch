@@ -23,11 +23,12 @@ namespace Tulpep.NetworkAutoSwitch.Service
                 switch (string.Concat(args))
                 {
                     case "--install":
-
+                        string currentPath = Assembly.GetExecutingAssembly().Location;
                         string pathOfService = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "NetworkAutoSwitch.exe");
+                        string logFile = Path.Combine(Path.GetDirectoryName(currentPath), "NetworkAutoSwitch.InstallLog");
                         Logging.WriteMessage("Copying file to " + pathOfService);
-                        File.Copy(Assembly.GetExecutingAssembly().Location, pathOfService, true);
-                        ManagedInstallerClass.InstallHelper(new string[] { pathOfService });
+                        File.Copy(currentPath, pathOfService, true);
+                        ManagedInstallerClass.InstallHelper(new string[] { "/LogFile=" + logFile, "/LogToConsole=true", pathOfService });
                         Logging.WriteMessage("Service Installed");
                         const string serviceName = "NetworkAutoSwitch";
                         int timeout = 5000;
@@ -36,7 +37,7 @@ namespace Tulpep.NetworkAutoSwitch.Service
                         StartService(serviceName, timeout);
                         return 0;
                     case "--uninstall":
-                        ManagedInstallerClass.InstallHelper(new string[] { "/u", Assembly.GetExecutingAssembly().Location });
+                        ManagedInstallerClass.InstallHelper(new string[] { "/uninstall", "/LogToConsole=true", Assembly.GetExecutingAssembly().Location });
                         Logging.WriteMessage("Service Uninstalled");
                         return 0;
                     default:
