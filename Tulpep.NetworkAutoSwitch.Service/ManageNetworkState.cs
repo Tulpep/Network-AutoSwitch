@@ -14,13 +14,13 @@ namespace Tulpep.NetworkAutoSwitch.Service
         public static void AnalyzeNow()
         {
             RefreshNetworkState();
-            Console.WriteLine(string.Format("{0}. Wireless is up: {1} - Wired is up: {2}", DateTime.Now, _networkState.WirelessIsUp, _networkState.WiredIsUp));
-            if (_networkState.WirelessIsUp && _networkState.WiredIsUp)
+            Logging.WriteMessage("Wireless: {0} | Wired: {1}", _networkState.WirelessStatus, _networkState.WiredStatus);
+            if (_networkState.WirelessStatus == OperationalStatus.Up && _networkState.WiredStatus == OperationalStatus.Up)
             {
                 ChangeNicState(_networkState.WirelessAdapters, true);
                 ChangeNicState(_networkState.WiredAdapters, false);
             }
-            else if (!_networkState.WirelessIsUp && !_networkState.WiredIsUp)
+            else if (_networkState.WirelessStatus == OperationalStatus.Down && _networkState.WiredStatus == OperationalStatus.Down)
             {
                 ChangeNicState(_networkState.WiredAdapters, true);
                 ChangeNicState(_networkState.WiredAdapters, true);
@@ -39,18 +39,15 @@ namespace Tulpep.NetworkAutoSwitch.Service
             NetworkInterface[] nics = NetworkInterface.GetAllNetworkInterfaces();
 
             IEnumerable<NetworkInterface> wirelessAdapters = nics.Where(x => x.NetworkInterfaceType == NetworkInterfaceType.Wireless80211);
-            _networkState.WirelessIsUp = wirelessAdapters.Any(x => x.OperationalStatus == OperationalStatus.Up);
-            foreach (NetworkInterface nic in wirelessAdapters)
-            {
-                _networkState.WirelessAdapters.Add(nic.Name);
-            }
+            if (wirelessAdapters.Any(x => x.OperationalStatus == OperationalStatus.Up)) _networkState.WirelessStatus = OperationalStatus.Up;
+            else _networkState.WirelessStatus = OperationalStatus.Down;
+            foreach (NetworkInterface nic in wirelessAdapters) _networkState.WirelessAdapters.Add(nic.Name);
+
 
             IEnumerable<NetworkInterface> wiredAdapters = nics.Where(x => x.NetworkInterfaceType == NetworkInterfaceType.Ethernet);
-            _networkState.WiredIsUp = wiredAdapters.Any(x => x.OperationalStatus == OperationalStatus.Up);
-            foreach (NetworkInterface nic in wiredAdapters)
-            {
-                _networkState.WiredAdapters.Add(nic.Name);
-            }
+            if (wiredAdapters.Any(x => x.OperationalStatus == OperationalStatus.Up)) _networkState.WiredStatus = OperationalStatus.Up;
+            else _networkState.WiredStatus = OperationalStatus.Down;
+            foreach (NetworkInterface nic in wiredAdapters) _networkState.WiredAdapters.Add(nic.Name);
         }
 
 
@@ -62,8 +59,17 @@ namespace Tulpep.NetworkAutoSwitch.Service
 
         private static void ChangeNicState(string interfaceName, bool enable)
         {
-            string arguments = "interface set interface \"" + interfaceName + "\" enable";
-            if (!enable) arguments = "interface set interface \"" + interfaceName + "\" disable";
+            string arguments;
+            if (enable)
+            {
+                arguments = "interface set interface \"" + interfaceName + "\" enable";
+                Logging.WriteMessage("Enabling " + interfaceName);
+            }
+            else
+            {
+                arguments = "interface set interface \"" + interfaceName + "\" disable";
+                Logging.WriteMessage("Disabling " + interfaceName);
+            }
             ProcessStartInfo processStartInfo = new ProcessStartInfo
             {
                 FileName = "netsh",
@@ -71,7 +77,6 @@ namespace Tulpep.NetworkAutoSwitch.Service
                 UseShellExecute = false,
                 CreateNoWindow = true
             };
-            Console.WriteLine("Running: netsh " + arguments);
             Process process = new Process { StartInfo = processStartInfo };
             process.Start();
             process.WaitForExit();

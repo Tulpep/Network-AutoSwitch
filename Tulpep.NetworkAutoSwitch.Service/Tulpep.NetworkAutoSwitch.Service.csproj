@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Logging.cs" />
     <Compile Include="ManageNetworkState.cs" />
     <Compile Include="DetectNetworkChanges.cs" />
     <Compile Include="NetworkAutoSwitch.cs">

@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
+using System.Net.NetworkInformation;
 
 namespace Tulpep.NetworkAutoSwitch.Service
 {
     class NetworkState
     {
-        public bool WiredIsUp { get; set; }
-        public bool WirelessIsUp { get; set; }
-        public HashSet<string> WiredAdapters { get; set; }
+        public OperationalStatus WirelessStatus { get; set; }
         public HashSet<string> WirelessAdapters { get; set; }
+
+        public HashSet<string> WiredAdapters { get; set; }
+        public OperationalStatus WiredStatus { get; set; }
+
 
         public NetworkState()
         {
