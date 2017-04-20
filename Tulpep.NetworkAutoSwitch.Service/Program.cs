@@ -25,7 +25,8 @@ namespace Tulpep.NetworkAutoSwitch.Service
                     case "--install":
                         string currentPath = Assembly.GetExecutingAssembly().Location;
                         string pathOfService = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "NetworkAutoSwitch.exe");
-                        if(currentPath != pathOfService)
+                        if(currentPath == pathOfService) Logging.WriteMessage("The file is located in {0}, you can not delete it from there after the service installation", currentPath);
+                        else
                         {
                             Logging.WriteMessage("Copying file to " + pathOfService);
                             File.Copy(currentPath, pathOfService, true);
@@ -34,7 +35,7 @@ namespace Tulpep.NetworkAutoSwitch.Service
                         Logging.WriteMessage("Service Installed");
                         const string serviceName = "NetworkAutoSwitch";
                         int timeout = 5000;
-                        Logging.WriteMessage(String.Format("Starting Windows Service {0} with timeout of {1} ms", serviceName, timeout));
+                        Logging.WriteMessage("Starting Windows Service {0} with timeout of {1} ms", serviceName, timeout);
                         StartService(serviceName, timeout);
                         Logging.WriteMessage("Service running");
                         return 0;
