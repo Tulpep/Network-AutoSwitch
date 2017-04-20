@@ -25,19 +25,21 @@ namespace Tulpep.NetworkAutoSwitch.Service
                     case "--install":
                         string currentPath = Assembly.GetExecutingAssembly().Location;
                         string pathOfService = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "NetworkAutoSwitch.exe");
-                        string logFile = Path.Combine(Path.GetDirectoryName(currentPath), "NetworkAutoSwitch.InstallLog");
-                        Logging.WriteMessage("Copying file to " + pathOfService);
-                        File.Copy(currentPath, pathOfService, true);
-                        ManagedInstallerClass.InstallHelper(new string[] { "/LogFile=" + logFile, "/LogToConsole=true", pathOfService });
+                        if(currentPath != pathOfService)
+                        {
+                            Logging.WriteMessage("Copying file to " + pathOfService);
+                            File.Copy(currentPath, pathOfService, true);
+                        }
+                        ManagedInstallerClass.InstallHelper(new string[] { "/LogFile=", "/LogToConsole=true", pathOfService });
                         Logging.WriteMessage("Service Installed");
                         const string serviceName = "NetworkAutoSwitch";
                         int timeout = 5000;
                         Logging.WriteMessage(String.Format("Starting Windows Service {0} with timeout of {1} ms", serviceName, timeout));
-                        Logging.WriteMessage("Service running");
                         StartService(serviceName, timeout);
+                        Logging.WriteMessage("Service running");
                         return 0;
                     case "--uninstall":
-                        ManagedInstallerClass.InstallHelper(new string[] { "/uninstall", "/LogToConsole=true", Assembly.GetExecutingAssembly().Location });
+                        ManagedInstallerClass.InstallHelper(new string[] { "/uninstall", "/LogFile=", "/LogToConsole=true", Assembly.GetExecutingAssembly().Location });
                         Logging.WriteMessage("Service Uninstalled");
                         return 0;
                     default:
