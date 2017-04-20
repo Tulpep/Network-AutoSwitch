@@ -65,13 +65,13 @@ namespace Tulpep.NetworkAutoSwitch.Service
                         }
                         return 0;
                     default:
-                        Logging.WriteMessage("Use parameters --install or --uninstall to use as Windows Service");
                         var exitEvent = new ManualResetEvent(false);
                         Console.CancelKeyPress += (sender, eventArgs) => {
                             eventArgs.Cancel = true;
                             exitEvent.Set();
                         };
                         DetectNetworkChanges detectNetworkChanges = new DetectNetworkChanges();
+                        Console.WriteLine("Use parameters --install or --uninstall to use as Windows Service");
                         Console.WriteLine("Press CTRL + C to exit...");
                         exitEvent.WaitOne();
                         detectNetworkChanges.StopNow();
