@@ -20,9 +20,9 @@ namespace Tulpep.NetworkAutoSwitch.Service
 
             if (Environment.UserInteractive)
             {
-                string currentPath = Assembly.GetExecutingAssembly().Location.ToLowerInvariant();
-                string pathInSystem32 = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "NetworkAutoSwitch.exe").ToLowerInvariant();
-                bool runningFromSystem32 = currentPath == pathInSystem32;
+                string currentPath = Assembly.GetExecutingAssembly().Location;
+                string pathInSystem32 = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "NetworkAutoSwitch.exe");
+                bool runningFromSystem32 = string.Equals(currentPath, pathInSystem32, StringComparison.OrdinalIgnoreCase);
                 switch (string.Concat(args))
                 {
                     case "--install":
