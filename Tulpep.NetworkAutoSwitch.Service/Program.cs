@@ -65,7 +65,7 @@ namespace Tulpep.NetworkAutoSwitch.Service
                         }
                         return 0;
                     default:
-                        Console.WriteLine("Use parameters --install or --uninstall to use as Windows Service");
+                        Logging.WriteMessage("Use parameters --install or --uninstall to use as Windows Service");
                         var exitEvent = new ManualResetEvent(false);
                         Console.CancelKeyPress += (sender, eventArgs) => {
                             eventArgs.Cancel = true;
