@@ -20,21 +20,26 @@ namespace Tulpep.NetworkAutoSwitch.Service
 
             if (Environment.UserInteractive)
             {
+                const string serviceName = "NetworkAutoSwitch";
+                const string exeFileName = "NetworkAutoSwitch.exe";
+                const string installStateFileName = "NetworkAutoSwitch.InstallState";
+
                 string currentPath = Assembly.GetExecutingAssembly().Location;
-                string pathInSystem32 = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "NetworkAutoSwitch.exe");
-                bool runningFromSystem32 = string.Equals(currentPath, pathInSystem32, StringComparison.OrdinalIgnoreCase);
+                string system32Path = Environment.GetFolderPath(Environment.SpecialFolder.System);
+                string serviceInSystem32Path = Path.Combine(system32Path, exeFileName);
+                bool runningFromSystem32 = string.Equals(currentPath, serviceInSystem32Path, StringComparison.OrdinalIgnoreCase);
+                Logging.WriteMessage("Starting from " + currentPath);
                 switch (string.Concat(args))
                 {
                     case "--install":
                         if(runningFromSystem32) Logging.WriteMessage("The file is located in {0}, you can not delete it from there after the service installation", currentPath);
                         else
                         {
-                            Logging.WriteMessage("Copying file to " + pathInSystem32);
-                            File.Copy(currentPath, pathInSystem32, true);
+                            Logging.WriteMessage("Copying file to " + serviceInSystem32Path);
+                            File.Copy(currentPath, serviceInSystem32Path, true);
                         }
-                        ManagedInstallerClass.InstallHelper(new string[] { "/LogFile=", "/LogToConsole=true", pathInSystem32 });
+                        ManagedInstallerClass.InstallHelper(new string[] { "/LogFile=", "/LogToConsole=true", serviceInSystem32Path });
                         Logging.WriteMessage("Service Installed");
-                        const string serviceName = "NetworkAutoSwitch";
                         int timeout = 5000;
                         Logging.WriteMessage("Starting Windows Service {0} with timeout of {1} ms", serviceName, timeout);
                         StartService(serviceName, timeout);
@@ -45,8 +50,18 @@ namespace Tulpep.NetworkAutoSwitch.Service
                         Logging.WriteMessage("Service Uninstalled");
                         if(!runningFromSystem32)
                         {
-                            Logging.WriteMessage("Removing file from " + pathInSystem32);
-                            File.Delete(pathInSystem32);
+                            if (File.Exists(serviceInSystem32Path))
+                            {
+                                Logging.WriteMessage("Removing file from " + serviceInSystem32Path);
+                                File.Delete(serviceInSystem32Path);
+                            }
+
+                            string installStatePath = Path.Combine(system32Path, installStateFileName);
+                            if(File.Exists(installStatePath))
+                            {
+                                Logging.WriteMessage("Removing file from " + installStatePath);
+                                File.Delete(installStatePath);
+                            }
                         }
                         return 0;
                     default:
@@ -56,8 +71,6 @@ namespace Tulpep.NetworkAutoSwitch.Service
                             eventArgs.Cancel = true;
                             exitEvent.Set();
                         };
-
-                        Logging.WriteMessage("Starting from " + currentPath);
                         DetectNetworkChanges detectNetworkChanges = new DetectNetworkChanges();
                         Console.WriteLine("Press CTRL + C to exit...");
                         exitEvent.WaitOne();
