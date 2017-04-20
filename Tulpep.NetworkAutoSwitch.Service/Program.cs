@@ -21,18 +21,18 @@ namespace Tulpep.NetworkAutoSwitch.Service
             if (Environment.UserInteractive)
             {
                 string currentPath = Assembly.GetExecutingAssembly().Location.ToLowerInvariant();
-                string pathOfService = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "NetworkAutoSwitch.exe").ToLowerInvariant();
-                bool runningFromSystem32 = currentPath == pathOfService;
+                string pathInSystem32 = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "NetworkAutoSwitch.exe").ToLowerInvariant();
+                bool runningFromSystem32 = currentPath == pathInSystem32;
                 switch (string.Concat(args))
                 {
                     case "--install":
                         if(runningFromSystem32) Logging.WriteMessage("The file is located in {0}, you can not delete it from there after the service installation", currentPath);
                         else
                         {
-                            Logging.WriteMessage("Copying file to " + pathOfService);
-                            File.Copy(currentPath, pathOfService, true);
+                            Logging.WriteMessage("Copying file to " + pathInSystem32);
+                            File.Copy(currentPath, pathInSystem32, true);
                         }
-                        ManagedInstallerClass.InstallHelper(new string[] { "/LogFile=", "/LogToConsole=true", pathOfService });
+                        ManagedInstallerClass.InstallHelper(new string[] { "/LogFile=", "/LogToConsole=true", pathInSystem32 });
                         Logging.WriteMessage("Service Installed");
                         const string serviceName = "NetworkAutoSwitch";
                         int timeout = 5000;
@@ -45,8 +45,8 @@ namespace Tulpep.NetworkAutoSwitch.Service
                         Logging.WriteMessage("Service Uninstalled");
                         if(!runningFromSystem32)
                         {
-                            Logging.WriteMessage("Removing file from " + currentPath);
-                            File.Delete(currentPath);
+                            Logging.WriteMessage("Removing file from " + pathInSystem32);
+                            File.Delete(pathInSystem32);
                         }
                         return 0;
                     default:
