@@ -20,12 +20,13 @@ namespace Tulpep.NetworkAutoSwitch.Service
 
             if (Environment.UserInteractive)
             {
+                string currentPath = Assembly.GetExecutingAssembly().Location.ToLowerInvariant();
+                string pathOfService = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "NetworkAutoSwitch.exe").ToLowerInvariant();
+                bool runningFromSystem32 = currentPath == pathOfService;
                 switch (string.Concat(args))
                 {
                     case "--install":
-                        string currentPath = Assembly.GetExecutingAssembly().Location;
-                        string pathOfService = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "NetworkAutoSwitch.exe");
-                        if(currentPath == pathOfService) Logging.WriteMessage("The file is located in {0}, you can not delete it from there after the service installation", currentPath);
+                        if(runningFromSystem32) Logging.WriteMessage("The file is located in {0}, you can not delete it from there after the service installation", currentPath);
                         else
                         {
                             Logging.WriteMessage("Copying file to " + pathOfService);
@@ -42,6 +43,11 @@ namespace Tulpep.NetworkAutoSwitch.Service
                     case "--uninstall":
                         ManagedInstallerClass.InstallHelper(new string[] { "/uninstall", "/LogFile=", "/LogToConsole=true", Assembly.GetExecutingAssembly().Location });
                         Logging.WriteMessage("Service Uninstalled");
+                        if(!runningFromSystem32)
+                        {
+                            Logging.WriteMessage("Removing file from " + currentPath);
+                            File.Delete(currentPath);
+                        }
                         return 0;
                     default:
                         Console.WriteLine("Use parameters --install or --uninstall to use as Windows Service");
@@ -51,6 +57,7 @@ namespace Tulpep.NetworkAutoSwitch.Service
                             exitEvent.Set();
                         };
 
+                        Logging.WriteMessage("Starting from " + currentPath);
                         DetectNetworkChanges detectNetworkChanges = new DetectNetworkChanges();
                         Console.WriteLine("Press CTRL + C to exit...");
                         exitEvent.WaitOne();
