@@ -10,7 +10,7 @@ namespace Tulpep.NetworkAutoSwitch.Service
         public bool Install { get; set; }
         [Option('u', "uninstall",  HelpText = "Uninstall Service.", MutuallyExclusiveSet = "unservice")]
         public bool Uninstall { get; set; }
-        [Option('p', "priority", HelpText = "Wireless or Wired Priority.", MutuallyExclusiveSet = "service")]
+        [Option('p', "priority", HelpText = "'Wireless' or 'Wired' priority.", MutuallyExclusiveSet = "service")]
         public Priority Priority { get; set; }
 
 
