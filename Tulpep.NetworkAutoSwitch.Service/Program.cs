@@ -61,12 +61,6 @@ namespace Tulpep.NetworkAutoSwitch.Service
                 }
                 else if (Options.Uninstall)
                 {
-                    if (Options.Priority != Priority.None)
-                    {
-                        Logging.WriteMessage("A priority is selected.");
-                        Console.WriteLine(Options.GetUsage());
-                        return 1;
-                    }
                     ManagedInstallerClass.InstallHelper(new string[] { "/uninstall", "/LogFile=", "/LogToConsole=true", Assembly.GetExecutingAssembly().Location });
                     Logging.WriteMessage("Service Uninstalled");
                     if (!runningFromSystem32)
