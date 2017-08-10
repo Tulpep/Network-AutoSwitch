@@ -41,7 +41,7 @@ namespace Tulpep.NetworkAutoSwitch.Service
                 {
                     if (Options.Priority == Priority.None)
                     {
-                        Logging.WriteMessage("No priority is selected.");
+                        Logging.WriteMessage("You must select a priority");
                         Console.WriteLine(Options.GetUsage());
                         return 1;
                     }
