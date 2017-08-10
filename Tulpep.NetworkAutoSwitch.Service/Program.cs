@@ -59,7 +59,7 @@ namespace Tulpep.NetworkAutoSwitch.Service
                     Logging.WriteMessage("Service running");
                     return 0;
                 }
-                else if (Options.Uninstall)
+                if (Options.Uninstall)
                 {
                     ManagedInstallerClass.InstallHelper(new string[] { "/uninstall", "/LogFile=", "/LogToConsole=true", Assembly.GetExecutingAssembly().Location });
                     Logging.WriteMessage("Service Uninstalled");
@@ -80,26 +80,24 @@ namespace Tulpep.NetworkAutoSwitch.Service
                     }
                     return 0;
                 }
-                else
+
+                if (Options.Priority == Priority.None)
                 {
-                    if (Options.Priority == Priority.None)
-                    {
-                        Logging.WriteMessage("No priority is selected.");
-                        Console.WriteLine(Options.GetUsage());
-                        return 1;
-                    }
-                    var exitEvent = new ManualResetEvent(false);
-                    Console.CancelKeyPress += (sender, eventArgs) => {
-                        eventArgs.Cancel = true;
-                        exitEvent.Set();
-                    };
-                    DetectNetworkChanges detectNetworkChanges = new DetectNetworkChanges(Options.Priority);
-                    Console.WriteLine("Use parameters --install or --uninstall to use as Windows Service");
-                    Console.WriteLine("Press CTRL + C to exit...");
-                    exitEvent.WaitOne();
-                    detectNetworkChanges.StopNow();
-                    return 0;
+                    Logging.WriteMessage("No priority is selected.");
+                    Console.WriteLine(Options.GetUsage());
+                    return 1;
                 }
+                var exitEvent = new ManualResetEvent(false);
+                Console.CancelKeyPress += (sender, eventArgs) => {
+                    eventArgs.Cancel = true;
+                    exitEvent.Set();
+                };
+                DetectNetworkChanges detectNetworkChanges = new DetectNetworkChanges(Options.Priority);
+                Console.WriteLine("Use parameters --install or --uninstall to use as Windows Service");
+                Console.WriteLine("Press CTRL + C to exit...");
+                exitEvent.WaitOne();
+                detectNetworkChanges.StopNow();
+                return 0;
             }
             else
             {
