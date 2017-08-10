@@ -11,14 +11,15 @@ namespace Tulpep.NetworkAutoSwitch.Service
 
         private static NetworkState _networkState = new NetworkState();
 
-        public static void AnalyzeNow()
+        public static void AnalyzeNow(Priority priority)
         {
-            RefreshNetworkState();
+            RefreshNetworkState(priority);
             Logging.WriteMessage("Wireless: {0} | Wired: {1}", _networkState.WirelessStatus, _networkState.WiredStatus);
             if (_networkState.WirelessStatus == OperationalStatus.Up && _networkState.WiredStatus == OperationalStatus.Up)
             {
-                ChangeNicState(_networkState.WirelessAdapters, true);
-                ChangeNicState(_networkState.WiredAdapters, false);
+
+                ChangeNicState(_networkState.WirelessAdapters, priority == Priority.Wireless ? true : false);
+                ChangeNicState(_networkState.WiredAdapters, priority == Priority.Wireless ? false : true);
             }
             else if (_networkState.WirelessStatus == OperationalStatus.Down && _networkState.WiredStatus == OperationalStatus.Down)
             {
@@ -34,7 +35,7 @@ namespace Tulpep.NetworkAutoSwitch.Service
             ChangeNicState(_networkState.WiredAdapters, true);
         }
 
-        private static void RefreshNetworkState()
+        private static void RefreshNetworkState(Priority priority)
         {
             NetworkInterface[] nics = NetworkInterface.GetAllNetworkInterfaces();
 

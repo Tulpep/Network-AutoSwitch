@@ -1,18 +1,23 @@
-﻿using System.ServiceProcess;
+﻿using CommandLine;
+using System.ServiceProcess;
 
 namespace Tulpep.NetworkAutoSwitch.Service
 {
     public partial class NetworkAutoSwitch : ServiceBase
     {
         DetectNetworkChanges _detectNetworkChanges;
-        public NetworkAutoSwitch()
+        static Options Options { get; set; }
+
+        public NetworkAutoSwitch(Priority priority)
         {
-            InitializeComponent();
+            InitializeComponent(priority);
         }
 
         protected override void OnStart(string[] args)
         {
-            _detectNetworkChanges = new DetectNetworkChanges();
+            Options = new Options();
+            if (Parser.Default.ParseArguments(args, Options))
+                _detectNetworkChanges = new DetectNetworkChanges(Options.Priority);
         }
 
         protected override void OnStop()

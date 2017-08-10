@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommandLine;
+using System;
 using System.Configuration.Install;
 using System.IO;
 using System.Reflection;
@@ -9,6 +10,8 @@ namespace Tulpep.NetworkAutoSwitch.Service
 {
     static class Program
     {
+        static Options Options { get; set; }
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -17,6 +20,11 @@ namespace Tulpep.NetworkAutoSwitch.Service
         {
 
             AppDomain.CurrentDomain.UnhandledException += CurrentDomainUnhandledException;
+
+            Options = new Options();
+            if (!Parser.Default.ParseArguments(args, Options))
+                return 1;
+
 
             if (Environment.UserInteractive)
             {
@@ -29,61 +37,81 @@ namespace Tulpep.NetworkAutoSwitch.Service
                 string serviceInSystem32Path = Path.Combine(system32Path, exeFileName);
                 bool runningFromSystem32 = string.Equals(currentPath, serviceInSystem32Path, StringComparison.OrdinalIgnoreCase);
                 Logging.WriteMessage("Starting from " + currentPath);
-                switch (string.Concat(args))
+                if (Options.Install)
                 {
-                    case "--install":
-                        if(runningFromSystem32) Logging.WriteMessage("The file is located in {0}, you can not delete it from there after the service installation", currentPath);
-                        else
+                    if (Options.Priority == Priority.None)
+                    {
+                        Logging.WriteMessage("No priority is selected.");
+                        Console.WriteLine(Options.GetUsage());
+                        return 1;
+                    }
+                    if (runningFromSystem32) Logging.WriteMessage("The file is located in {0}, you can not delete it from there after the service installation", currentPath);
+                    else
+                    {
+                        Logging.WriteMessage("Copying file to " + serviceInSystem32Path);
+                        File.Copy(currentPath, serviceInSystem32Path, true);
+                    }
+                    ManagedInstallerClass.InstallHelper(new string[] { "/LogFile=", "/LogToConsole=true", serviceInSystem32Path });
+                    Logging.WriteMessage("Service Installed");
+                    int timeout = 5000;
+                    Logging.WriteMessage("Starting Windows Service {0} with timeout of {1} ms", serviceName, timeout);
+                    StartService(serviceName, timeout);
+                    Logging.WriteMessage("Service running");
+                    return 0;
+                }
+                else if (Options.Uninstall)
+                {
+                    if (Options.Priority != Priority.None)
+                    {
+                        Logging.WriteMessage("A priority is selected.");
+                        Console.WriteLine(Options.GetUsage());
+                        return 1;
+                    }
+                    ManagedInstallerClass.InstallHelper(new string[] { "/uninstall", "/LogFile=", "/LogToConsole=true", Assembly.GetExecutingAssembly().Location });
+                    Logging.WriteMessage("Service Uninstalled");
+                    if (!runningFromSystem32)
+                    {
+                        if (File.Exists(serviceInSystem32Path))
                         {
-                            Logging.WriteMessage("Copying file to " + serviceInSystem32Path);
-                            File.Copy(currentPath, serviceInSystem32Path, true);
+                            Logging.WriteMessage("Removing file from " + serviceInSystem32Path);
+                            File.Delete(serviceInSystem32Path);
                         }
-                        ManagedInstallerClass.InstallHelper(new string[] { "/LogFile=", "/LogToConsole=true", serviceInSystem32Path });
-                        Logging.WriteMessage("Service Installed");
-                        int timeout = 5000;
-                        Logging.WriteMessage("Starting Windows Service {0} with timeout of {1} ms", serviceName, timeout);
-                        StartService(serviceName, timeout);
-                        Logging.WriteMessage("Service running");
-                        return 0;
-                    case "--uninstall":
-                        ManagedInstallerClass.InstallHelper(new string[] { "/uninstall", "/LogFile=", "/LogToConsole=true", Assembly.GetExecutingAssembly().Location });
-                        Logging.WriteMessage("Service Uninstalled");
-                        if(!runningFromSystem32)
+
+                        string installStatePath = Path.Combine(system32Path, installStateFileName);
+                        if (File.Exists(installStatePath))
                         {
-                            if (File.Exists(serviceInSystem32Path))
-                            {
-                                Logging.WriteMessage("Removing file from " + serviceInSystem32Path);
-                                File.Delete(serviceInSystem32Path);
-                            }
-
-                            string installStatePath = Path.Combine(system32Path, installStateFileName);
-                            if(File.Exists(installStatePath))
-                            {
-                                Logging.WriteMessage("Removing file from " + installStatePath);
-                                File.Delete(installStatePath);
-                            }
+                            Logging.WriteMessage("Removing file from " + installStatePath);
+                            File.Delete(installStatePath);
                         }
-                        return 0;
-                    default:
-                        var exitEvent = new ManualResetEvent(false);
-                        Console.CancelKeyPress += (sender, eventArgs) => {
-                            eventArgs.Cancel = true;
-                            exitEvent.Set();
-                        };
-                        DetectNetworkChanges detectNetworkChanges = new DetectNetworkChanges();
-                        Console.WriteLine("Use parameters --install or --uninstall to use as Windows Service");
-                        Console.WriteLine("Press CTRL + C to exit...");
-                        exitEvent.WaitOne();
-                        detectNetworkChanges.StopNow();
-                        return 0;
-
+                    }
+                    return 0;
+                }
+                else
+                {
+                    if (Options.Priority == Priority.None)
+                    {
+                        Logging.WriteMessage("No priority is selected.");
+                        Console.WriteLine(Options.GetUsage());
+                        return 1;
+                    }
+                    var exitEvent = new ManualResetEvent(false);
+                    Console.CancelKeyPress += (sender, eventArgs) => {
+                        eventArgs.Cancel = true;
+                        exitEvent.Set();
+                    };
+                    DetectNetworkChanges detectNetworkChanges = new DetectNetworkChanges(Options.Priority);
+                    Console.WriteLine("Use parameters --install or --uninstall to use as Windows Service");
+                    Console.WriteLine("Press CTRL + C to exit...");
+                    exitEvent.WaitOne();
+                    detectNetworkChanges.StopNow();
+                    return 0;
                 }
             }
             else
             {
                 ServiceBase[]  ServicesToRun = new ServiceBase[]
                 {
-                    new NetworkAutoSwitch()
+                    new NetworkAutoSwitch(Options.Priority)
                 };
                 ServiceBase.Run(ServicesToRun);
                 return 0;
