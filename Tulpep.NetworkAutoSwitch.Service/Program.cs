@@ -53,10 +53,7 @@ namespace Tulpep.NetworkAutoSwitch.Service
                     }
                     ManagedInstallerClass.InstallHelper(new string[] { "/LogFile=", "/LogToConsole=true", serviceInSystem32Path });
                     Logging.WriteMessage("Service Installed");
-                    int timeout = 5000;
-                    Logging.WriteMessage("Starting Windows Service {0} with timeout of {1} ms", serviceName, timeout);
-                    StartService(serviceName, timeout);
-                    Logging.WriteMessage("Service running");
+                    StartService(serviceName, 500);
                     return 0;
                 }
                 if (Options.Uninstall)
@@ -120,10 +117,12 @@ namespace Tulpep.NetworkAutoSwitch.Service
 
         private static void StartService(string serviceName, int timeoutMilliseconds)
         {
+            Logging.WriteMessage("Starting Windows Service {0} with timeout of {1} ms", serviceName, timeoutMilliseconds);
             ServiceController service = new ServiceController(serviceName);
             TimeSpan timeout = TimeSpan.FromMilliseconds(timeoutMilliseconds);
             service.Start();
             service.WaitForStatus(ServiceControllerStatus.Running, timeout);
+            Logging.WriteMessage("Service running");
         }
 
     }
