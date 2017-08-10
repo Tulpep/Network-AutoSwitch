@@ -7,7 +7,6 @@
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        private Priority Priority { get; set; }
 
         /// <summary>
         /// Clean up any resources being used.
@@ -28,14 +27,12 @@
         /// Required method for Designer support - do not modify 
         /// the contents of this method with the code editor.
         /// </summary>
-        private void InitializeComponent(Priority priority)
+        private void InitializeComponent()
         {
             // 
             // NetworkAutoSwitch
             // 
             this.ServiceName = "Tulpep Network AutoSwitch Service";
-            this.Priority = priority;
-
         }
 
         #endregion

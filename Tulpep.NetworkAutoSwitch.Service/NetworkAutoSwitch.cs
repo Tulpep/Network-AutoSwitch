@@ -8,9 +8,9 @@ namespace Tulpep.NetworkAutoSwitch.Service
         DetectNetworkChanges _detectNetworkChanges;
         static Options Options { get; set; }
 
-        public NetworkAutoSwitch(Priority priority)
+        public NetworkAutoSwitch()
         {
-            InitializeComponent(priority);
+            InitializeComponent();
         }
 
         protected override void OnStart(string[] args)

@@ -103,7 +103,7 @@ namespace Tulpep.NetworkAutoSwitch.Service
             {
                 ServiceBase[]  ServicesToRun = new ServiceBase[]
                 {
-                    new NetworkAutoSwitch(Options.Priority)
+                    new NetworkAutoSwitch()
                 };
                 ServiceBase.Run(ServicesToRun);
                 return 0;
