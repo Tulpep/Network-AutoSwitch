@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration.Install;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -19,7 +20,6 @@ namespace Tulpep.NetworkAutoSwitch.Service
 
         protected override void OnBeforeInstall(System.Collections.IDictionary savedState)
         {
-
             StringBuilder sbPathWIthParams = new StringBuilder(Context.Parameters["assemblypath"]);
 
             //Wrap the existing path in quotes if it isn't already
@@ -29,8 +29,12 @@ namespace Tulpep.NetworkAutoSwitch.Service
                 sbPathWIthParams.Append("\"");
             }
 
-            //Add desired parameters
-            sbPathWIthParams.Append(" test");
+
+            //Add original parameters
+            foreach (var arg in Environment.GetCommandLineArgs().Skip(1))
+            {
+                sbPathWIthParams.Append(" " + arg);
+            }
 
             Context.Parameters["assemblypath"] = sbPathWIthParams.ToString();
             File.WriteAllText(@"C:\log.txt", sbPathWIthParams.ToString());
