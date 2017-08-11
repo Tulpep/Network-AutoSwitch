@@ -7,6 +7,7 @@
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
+
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
@@ -32,7 +33,6 @@
             // NetworkAutoSwitch
             // 
             this.ServiceName = "Tulpep Network AutoSwitch Service";
-
         }
 
         #endregion

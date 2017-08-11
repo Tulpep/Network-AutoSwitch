@@ -5,15 +5,16 @@ namespace Tulpep.NetworkAutoSwitch.Service
 {
     public class DetectNetworkChanges
     {
-        public DetectNetworkChanges()
+        public DetectNetworkChanges(Priority priority)
         {
-            ManageNetworkState.AnalyzeNow();
-            NetworkChange.NetworkAddressChanged += new NetworkAddressChangedEventHandler(NetworkAddressChanged);
+            ManageNetworkState.AnalyzeNow(priority);
+            NetworkChange.NetworkAddressChanged += new NetworkAddressChangedEventHandler((sender, e) => NetworkAddressChanged(sender, e, priority));
+
         }
 
-        private void NetworkAddressChanged(object sender, EventArgs e)
+        private void NetworkAddressChanged(object sender, EventArgs e, Priority priority)
         {
-            ManageNetworkState.AnalyzeNow();
+            ManageNetworkState.AnalyzeNow(priority);
         }
 
         public void StopNow()
