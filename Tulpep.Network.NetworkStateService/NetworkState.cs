@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Net.NetworkInformation;
 
-namespace Tulpep.NetworkAutoSwitch.Service
+namespace Tulpep.NetworkAutoSwitch.NetworkStateLibrary
 {
-    class NetworkState
+    public class NetworkState
     {
         public OperationalStatus WirelessStatus { get; set; }
         public HashSet<string> WirelessAdapters { get; set; }

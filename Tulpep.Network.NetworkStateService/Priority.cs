@@ -1,5 +1,5 @@
 ﻿
-namespace Tulpep.NetworkAutoSwitch.Service
+namespace Tulpep.NetworkAutoSwitch.NetworkStateLibrary
 {
     public enum Priority
     {

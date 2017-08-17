@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.NetworkInformation;
+using Tulpep.NetworkAutoSwitch.NetworkStateLibrary;
 
 namespace Tulpep.NetworkAutoSwitch.Service
 {
@@ -9,7 +10,6 @@ namespace Tulpep.NetworkAutoSwitch.Service
         {
             ManageNetworkState.AnalyzeNow(priority);
             NetworkChange.NetworkAddressChanged += new NetworkAddressChangedEventHandler((sender, e) => NetworkAddressChanged(sender, e, priority));
-
         }
 
         private void NetworkAddressChanged(object sender, EventArgs e, Priority priority)
@@ -20,7 +20,7 @@ namespace Tulpep.NetworkAutoSwitch.Service
         public void StopNow()
         {
             Logging.WriteMessage("Exiting now");
-            ManageNetworkState.EnableAllNics();
+            NetworkStateService.EnableAllNics();
         }
 
     }
