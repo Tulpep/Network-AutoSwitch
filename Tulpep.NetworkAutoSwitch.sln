@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tulpep.NetworkAutoSwitch.Se
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tulpep.NetworkAutoSwitch.NetworkStateLibrary", "Tulpep.Network.NetworkStateService\Tulpep.NetworkAutoSwitch.NetworkStateLibrary.csproj", "{9E33F72C-4A08-4081-9A4A-E8ACE7A9B7FD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tulpep.NetworkAutoSwitch.ProxyService", "Tulpep.NetworkAutoSwitch.ProxyService\Tulpep.NetworkAutoSwitch.ProxyService.csproj", "{A34CBCAA-254F-4085-BBF2-B85CECB59B44}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,6 +26,10 @@ Global
 		{9E33F72C-4A08-4081-9A4A-E8ACE7A9B7FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E33F72C-4A08-4081-9A4A-E8ACE7A9B7FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9E33F72C-4A08-4081-9A4A-E8ACE7A9B7FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A34CBCAA-254F-4085-BBF2-B85CECB59B44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A34CBCAA-254F-4085-BBF2-B85CECB59B44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A34CBCAA-254F-4085-BBF2-B85CECB59B44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A34CBCAA-254F-4085-BBF2-B85CECB59B44}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
