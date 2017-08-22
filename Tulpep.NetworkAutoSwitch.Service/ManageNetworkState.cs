@@ -1,5 +1,4 @@
 ﻿using System.Net.NetworkInformation;
-using System.Windows.Forms;
 using Tulpep.NetworkAutoSwitch.NetworkStateLibrary;
 using Tulpep.NetworkAutoSwitch.UtilityLibrary;
 
@@ -9,7 +8,6 @@ namespace Tulpep.NetworkAutoSwitch.Service
     {
         public static void AnalyzeNow(Priority priority)
         {
-            MessageBox.Show("Begin.");
             NetworkState networkState = NetworkStateService.RefreshNetworkState(priority);
             Logging.WriteMessage("Wireless: {0} | Wired: {1}", networkState.WirelessStatus, networkState.WiredStatus);
             if (networkState.WirelessStatus == OperationalStatus.Up && networkState.WiredStatus == OperationalStatus.Up)

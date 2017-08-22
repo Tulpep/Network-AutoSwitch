@@ -2,7 +2,6 @@
 using System;
 using System.Net.NetworkInformation;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 using Tulpep.NetworkAutoSwitch.NetworkStateLibrary;
 using Tulpep.NetworkAutoSwitch.UtilityLibrary;
 
@@ -12,7 +11,6 @@ namespace Tulpep.NetworkAutoSwitch.ProxyService
     {
         public static void AnalyzeNow(Priority priority)
         {
-            MessageBox.Show("Begin.");
             NetworkState networkState = NetworkStateService.RefreshNetworkState(priority);
             int proxyState = GetProxyState();
             Logging.WriteMessage("Wireless: {0} | Wired: {1} | Proxy: {2}", networkState.WirelessStatus, networkState.WiredStatus, proxyState == 1 ? "Up" : "Down");
@@ -38,20 +36,21 @@ namespace Tulpep.NetworkAutoSwitch.ProxyService
             }
         }
 
-     //   [DllImport("wininet.dll")]
-      //  public static extern bool InternetSetOption(IntPtr hInternet, int dwOption, IntPtr lpBuffer, int dwBufferLength);
-       // public const int INTERNET_OPTION_SETTINGS_CHANGED = 39;
-       // public const int INTERNET_OPTION_REFRESH = 37;
+        [DllImport("wininet.dll")]
+        public static extern bool InternetSetOption(IntPtr hInternet, int dwOption, IntPtr lpBuffer, int dwBufferLength);
+        public const int INTERNET_OPTION_SETTINGS_CHANGED = 39;
+        public const int INTERNET_OPTION_REFRESH = 37;
         public const string REGISTRY_KEY_IS = "Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings";
 
         public static void SetProxyState(bool proxyEnabled)
         {
             RegistryKey registry = Registry.CurrentUser.OpenSubKey(REGISTRY_KEY_IS, true);
 
+            // https://stackoverflow.com/questions/1632280/c-sharp-windows-service-needs-to-make-registry-changes
             registry.SetValue("ProxyEnable", proxyEnabled ? 1 : 0);
 
-          //  InternetSetOption(IntPtr.Zero, INTERNET_OPTION_SETTINGS_CHANGED, IntPtr.Zero, 0);
-          //  InternetSetOption(IntPtr.Zero, INTERNET_OPTION_REFRESH, IntPtr.Zero, 0);
+            InternetSetOption(IntPtr.Zero, INTERNET_OPTION_SETTINGS_CHANGED, IntPtr.Zero, 0);
+            InternetSetOption(IntPtr.Zero, INTERNET_OPTION_REFRESH, IntPtr.Zero, 0);
         }
 
         public static int GetProxyState()
