@@ -1,7 +1,7 @@
 ﻿using CommandLine;
 using System.ServiceProcess;
 
-namespace Tulpep.NetworkAutoSwitch.Service
+namespace Tulpep.NetworkAutoSwitch.NetworkService
 {
     public partial class NetworkAutoSwitch : ServiceBase
     {

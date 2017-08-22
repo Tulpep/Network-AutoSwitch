@@ -7,7 +7,7 @@
     <ProjectGuid>{C21510B8-4125-4501-91F8-19A244027157}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Tulpep.NetworkAutoSwitch.Service</RootNamespace>
+    <RootNamespace>Tulpep.NetworkAutoSwitch.NetworkService</RootNamespace>
     <AssemblyName>NetworkAutoSwitch</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

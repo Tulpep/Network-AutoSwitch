@@ -1,4 +1,4 @@
-﻿namespace Tulpep.NetworkAutoSwitch.Service
+﻿namespace Tulpep.NetworkAutoSwitch.NetworkService
 {
     partial class NetworkAutoSwitch
     {

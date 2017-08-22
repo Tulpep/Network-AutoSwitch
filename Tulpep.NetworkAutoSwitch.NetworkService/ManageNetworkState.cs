@@ -2,7 +2,7 @@
 using Tulpep.NetworkAutoSwitch.NetworkStateLibrary;
 using Tulpep.NetworkAutoSwitch.UtilityLibrary;
 
-namespace Tulpep.NetworkAutoSwitch.Service
+namespace Tulpep.NetworkAutoSwitch.NetworkService
 {
     public class ManageNetworkState
     {

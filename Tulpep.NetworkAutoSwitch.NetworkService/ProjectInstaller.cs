@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 
-namespace Tulpep.NetworkAutoSwitch.Service
+namespace Tulpep.NetworkAutoSwitch.NetworkService
 {
     [RunInstaller(true)]
     public partial class ProjectInstaller : System.Configuration.Install.Installer
