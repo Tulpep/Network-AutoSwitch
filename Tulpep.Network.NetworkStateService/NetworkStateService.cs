@@ -10,7 +10,7 @@ namespace Tulpep.NetworkAutoSwitch.NetworkStateLibrary
         private static NetworkState _networkState = new NetworkState();
 
 
-        public static void RefreshNetworkState(Priority priority)
+        public static NetworkState RefreshNetworkState(Priority priority)
         {
             NetworkInterface[] nics = NetworkInterface.GetAllNetworkInterfaces();
 
@@ -24,6 +24,8 @@ namespace Tulpep.NetworkAutoSwitch.NetworkStateLibrary
             if (wiredAdapters.Any(x => x.OperationalStatus == OperationalStatus.Up)) _networkState.WiredStatus = OperationalStatus.Up;
             else _networkState.WiredStatus = OperationalStatus.Down;
             foreach (NetworkInterface nic in wiredAdapters) _networkState.WiredAdapters.Add(nic.Name);
+
+            return _networkState;
         }
 
         public static void EnableAllNics()

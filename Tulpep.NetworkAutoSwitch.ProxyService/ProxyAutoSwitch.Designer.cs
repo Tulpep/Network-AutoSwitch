@@ -1,11 +1,12 @@
-﻿namespace WindowsService1
+﻿namespace Tulpep.NetworkAutoSwitch.ProxyService
 {
-    partial class Service1
+    partial class ProxyAutoSwitch
     {
         /// <summary> 
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
+
 
         /// <summary>
         /// Clean up any resources being used.
@@ -28,8 +29,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
-            this.ServiceName = "Service1";
+            // 
+            // NetworkAutoSwitch
+            // 
+            this.ServiceName = "Tulpep Proxy AutoSwitch Service";
         }
 
         #endregion

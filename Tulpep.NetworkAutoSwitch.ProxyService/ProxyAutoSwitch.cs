@@ -3,12 +3,12 @@ using System.ServiceProcess;
 
 namespace Tulpep.NetworkAutoSwitch.ProxyService
 {
-    public partial class NetworkAutoSwitch : ServiceBase
+    public partial class ProxyAutoSwitch : ServiceBase
     {
         DetectNetworkChanges _detectNetworkChanges;
         static Options Options { get; set; }
 
-        public NetworkAutoSwitch()
+        public ProxyAutoSwitch()
         {
             InitializeComponent();
         }

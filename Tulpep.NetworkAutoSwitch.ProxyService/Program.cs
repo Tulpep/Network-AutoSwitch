@@ -19,7 +19,6 @@ namespace Tulpep.NetworkAutoSwitch.ProxyService
 
         static int Main(string[] args)
         {
-            Logging.WriteMessage("Service Uninstalled");
 
             AppDomain.CurrentDomain.UnhandledException += CurrentDomainUnhandledException;
 
@@ -27,13 +26,12 @@ namespace Tulpep.NetworkAutoSwitch.ProxyService
             if (!Parser.Default.ParseArguments(args, Options))
                 return 1;
 
-            Logging.WriteMessage("Service Uninstalled");
+
             if (Environment.UserInteractive)
             {
-                Logging.WriteMessage("Service Uninstalled");
-                const string serviceName = "NetworkAutoSwitch";
-                const string exeFileName = "NetworkAutoSwitch.exe";
-                const string installStateFileName = "NetworkAutoSwitch.InstallState";
+                const string serviceName = "ProxyAutoSwitch";
+                const string exeFileName = "ProxyAutoSwitch.exe";
+                const string installStateFileName = "ProxyAutoSwitch.InstallState";
 
                 string currentPath = Assembly.GetExecutingAssembly().Location;
                 string system32Path = Environment.GetFolderPath(Environment.SpecialFolder.System);
@@ -103,7 +101,7 @@ namespace Tulpep.NetworkAutoSwitch.ProxyService
             {
                 ServiceBase[] ServicesToRun = new ServiceBase[]
                 {
-                    new NetworkAutoSwitch()
+                    new ProxyAutoSwitch()
                 };
                 ServiceBase.Run(ServicesToRun);
                 return 0;

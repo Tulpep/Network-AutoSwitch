@@ -8,19 +8,18 @@ namespace Tulpep.NetworkAutoSwitch.ProxyService
     {
         public DetectNetworkChanges(Priority priority)
         {
-            ManageNetworkState.AnalyzeNow(priority);
+            ManageProxyState.AnalyzeNow(priority);
             NetworkChange.NetworkAddressChanged += new NetworkAddressChangedEventHandler((sender, e) => NetworkAddressChanged(sender, e, priority));
         }
 
         private void NetworkAddressChanged(object sender, EventArgs e, Priority priority)
         {
-            ManageNetworkState.AnalyzeNow(priority);
+            ManageProxyState.AnalyzeNow(priority);
         }
 
         public void StopNow()
         {
             Logging.WriteMessage("Exiting now");
-            NetworkStateService.EnableAllNics();
         }
 
     }

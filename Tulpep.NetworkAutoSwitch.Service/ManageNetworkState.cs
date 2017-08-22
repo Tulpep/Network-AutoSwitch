@@ -5,26 +5,23 @@ namespace Tulpep.NetworkAutoSwitch.Service
 {
     public class ManageNetworkState
     {
-        private static NetworkState _networkState = new NetworkState();
-
-
         public static void AnalyzeNow(Priority priority)
         {
-            NetworkStateService.RefreshNetworkState(priority);
-            Logging.WriteMessage("Wireless: {0} | Wired: {1}", _networkState.WirelessStatus, _networkState.WiredStatus);
-            if (_networkState.WirelessStatus == OperationalStatus.Up && _networkState.WiredStatus == OperationalStatus.Up)
+            NetworkState networkState = NetworkStateService.RefreshNetworkState(priority);
+            Logging.WriteMessage("Wireless: {0} | Wired: {1}", networkState.WirelessStatus, networkState.WiredStatus);
+            if (networkState.WirelessStatus == OperationalStatus.Up && networkState.WiredStatus == OperationalStatus.Up)
             {
-                NetworkStateService.ChangeNicState(_networkState.WirelessAdapters, priority == Priority.Wireless ? true : false);
-                NetworkStateService.LogChangeStateAdapters(_networkState.WirelessAdapters, priority == Priority.Wireless ? true : false);
-                NetworkStateService.ChangeNicState(_networkState.WiredAdapters, priority == Priority.Wireless ? false : true);
-                NetworkStateService.LogChangeStateAdapters(_networkState.WirelessAdapters, priority == Priority.Wireless ? false : true);
+                NetworkStateService.ChangeNicState(networkState.WirelessAdapters, priority == Priority.Wireless ? true : false);
+                NetworkStateService.LogChangeStateAdapters(networkState.WirelessAdapters, priority == Priority.Wireless ? true : false);
+                NetworkStateService.ChangeNicState(networkState.WiredAdapters, priority == Priority.Wireless ? false : true);
+                NetworkStateService.LogChangeStateAdapters(networkState.WirelessAdapters, priority == Priority.Wireless ? false : true);
             }
-            else if (_networkState.WirelessStatus == OperationalStatus.Down && _networkState.WiredStatus == OperationalStatus.Down)
+            else if (networkState.WirelessStatus == OperationalStatus.Down && networkState.WiredStatus == OperationalStatus.Down)
             {
-                NetworkStateService.ChangeNicState(_networkState.WiredAdapters, true);
-                NetworkStateService.LogChangeStateAdapters(_networkState.WirelessAdapters, true);
-                NetworkStateService.ChangeNicState(_networkState.WirelessAdapters, true);
-                NetworkStateService.LogChangeStateAdapters(_networkState.WirelessAdapters, true);
+                NetworkStateService.ChangeNicState(networkState.WiredAdapters, true);
+                NetworkStateService.LogChangeStateAdapters(networkState.WirelessAdapters, true);
+                NetworkStateService.ChangeNicState(networkState.WirelessAdapters, true);
+                NetworkStateService.LogChangeStateAdapters(networkState.WirelessAdapters, true);
             }
         }
     }
