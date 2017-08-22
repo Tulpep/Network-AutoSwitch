@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Diagnostics;
+using Tulpep.NetworkAutoSwitch.UtilityLibrary;
 
 namespace Tulpep.NetworkAutoSwitch.NetworkStateLibrary
 {
@@ -48,7 +49,7 @@ namespace Tulpep.NetworkAutoSwitch.NetworkStateLibrary
         public static void LogChangeStateAdapter(string nicName, bool enable)
         {
             string action = enable ? "Enabling " : "Disabling ";
-            LoggingNetworkState.WriteMessage(action + nicName);
+            Logging.WriteMessage(action + nicName);
         }
 
         public static void ChangeNicState(string interfaceName, bool enable)

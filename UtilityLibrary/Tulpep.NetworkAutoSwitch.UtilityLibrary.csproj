@@ -4,13 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9E33F72C-4A08-4081-9A4A-E8ACE7A9B7FD}</ProjectGuid>
+    <ProjectGuid>{1B60F9FF-B4A1-471E-84BF-53CF97DFE59F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Tulpep.Network.NetworkStateService</RootNamespace>
-    <AssemblyName>Tulpep.Network.NetworkStateService</AssemblyName>
+    <RootNamespace>UtilityLibrary</RootNamespace>
+    <AssemblyName>UtilityLibrary</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -34,20 +35,14 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="NetworkState.cs" />
-    <Compile Include="NetworkStateService.cs" />
-    <Compile Include="Priority.cs" />
+    <Compile Include="Logging.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\UtilityLibrary\Tulpep.NetworkAutoSwitch.UtilityLibrary.csproj">
-      <Project>{1b60f9ff-b4a1-471e-84bf-53cf97dfe59f}</Project>
-      <Name>Tulpep.NetworkAutoSwitch.UtilityLibrary</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

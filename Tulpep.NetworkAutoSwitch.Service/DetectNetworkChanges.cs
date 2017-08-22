@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.NetworkInformation;
 using Tulpep.NetworkAutoSwitch.NetworkStateLibrary;
+using Tulpep.NetworkAutoSwitch.UtilityLibrary;
 
 namespace Tulpep.NetworkAutoSwitch.Service
 {

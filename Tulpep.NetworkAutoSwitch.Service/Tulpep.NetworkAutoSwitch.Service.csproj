@@ -71,6 +71,7 @@
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
     <Reference Include="System.Management" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
@@ -78,7 +79,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Logging.cs" />
     <Compile Include="ManageNetworkState.cs" />
     <Compile Include="DetectNetworkChanges.cs" />
     <Compile Include="NetworkAutoSwitch.cs">
@@ -117,6 +117,10 @@
     <ProjectReference Include="..\Tulpep.Network.NetworkStateService\Tulpep.NetworkAutoSwitch.NetworkStateLibrary.csproj">
       <Project>{9e33f72c-4a08-4081-9a4a-e8ace7a9b7fd}</Project>
       <Name>Tulpep.NetworkAutoSwitch.NetworkStateLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UtilityLibrary\Tulpep.NetworkAutoSwitch.UtilityLibrary.csproj">
+      <Project>{1b60f9ff-b4a1-471e-84bf-53cf97dfe59f}</Project>
+      <Name>Tulpep.NetworkAutoSwitch.UtilityLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

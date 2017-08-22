@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ProxyAutoSwitch")]
-[assembly: AssemblyDescription("Detailed information at https://github.com/Tulpep/Network-AutoSwitch")]
+[assembly: AssemblyTitle("UtilityLibrary")]
+[assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Tulpep")]
-[assembly: AssemblyProduct("ProxyAutoSwitch")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("UtilityLibrary")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("a34cbcaa-254f-4085-bbf2-b85cecb59b44")]
+[assembly: Guid("1b60f9ff-b4a1-471e-84bf-53cf97dfe59f")]
 
 // Version information for an assembly consists of the following four values:
 //

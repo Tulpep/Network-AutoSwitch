@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Tulpep.NetworkAutoSwitch.ProxyService
+namespace Tulpep.NetworkAutoSwitch.UtilityLibrary
 {
-    static class Logging
+    public static class Logging
     {
         public static void WriteMessage(string text, params object[] args)
         {
@@ -10,3 +10,4 @@ namespace Tulpep.NetworkAutoSwitch.ProxyService
         }
     }
 }
+
