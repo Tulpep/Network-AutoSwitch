@@ -75,6 +75,7 @@
   <ItemGroup>
     <Compile Include="DetectNetworkChanges.cs" />
     <Compile Include="ManageProxyState.cs" />
+    <Compile Include="ProcessExtensions.cs" />
     <Compile Include="ProxyAutoSwitch.cs">
       <SubType>Component</SubType>
     </Compile>
