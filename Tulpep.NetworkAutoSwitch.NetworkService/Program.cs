@@ -5,8 +5,8 @@ using System.IO;
 using System.Reflection;
 using System.ServiceProcess;
 using System.Threading;
+using Tulpep.Network.NetworkStateService;
 using Tulpep.NetworkAutoSwitch.NetworkStateLibrary;
-using Tulpep.NetworkAutoSwitch.UtilityLibrary;
 
 namespace Tulpep.NetworkAutoSwitch.NetworkService
 {

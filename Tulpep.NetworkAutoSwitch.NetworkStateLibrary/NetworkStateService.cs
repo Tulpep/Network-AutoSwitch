@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Diagnostics;
-using Tulpep.NetworkAutoSwitch.UtilityLibrary;
+using Tulpep.Network.NetworkStateService;
 
 namespace Tulpep.NetworkAutoSwitch.NetworkStateLibrary
 {

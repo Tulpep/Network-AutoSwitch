@@ -1,10 +1,9 @@
 ﻿using Microsoft.Win32;
 using System;
-using System.Management;
 using System.Net.NetworkInformation;
 using System.Runtime.InteropServices;
+using Tulpep.Network.NetworkStateService;
 using Tulpep.NetworkAutoSwitch.NetworkStateLibrary;
-using Tulpep.NetworkAutoSwitch.UtilityLibrary;
 
 namespace Tulpep.NetworkAutoSwitch.ProxyService
 {

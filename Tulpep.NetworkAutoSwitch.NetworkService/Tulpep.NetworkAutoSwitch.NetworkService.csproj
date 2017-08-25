@@ -117,10 +117,6 @@
       <Project>{9e33f72c-4a08-4081-9a4a-e8ace7a9b7fd}</Project>
       <Name>Tulpep.NetworkAutoSwitch.NetworkStateLibrary</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Tulpep.NetworkAutoSwitch.UtilityLibrary\Tulpep.NetworkAutoSwitch.UtilityLibrary.csproj">
-      <Project>{1b60f9ff-b4a1-471e-84bf-53cf97dfe59f}</Project>
-      <Name>Tulpep.NetworkAutoSwitch.UtilityLibrary</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
