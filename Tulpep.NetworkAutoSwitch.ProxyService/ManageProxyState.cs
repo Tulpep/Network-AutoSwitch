@@ -38,7 +38,7 @@ namespace Tulpep.NetworkAutoSwitch.ProxyService
         public static extern bool InternetSetOption(IntPtr hInternet, int dwOption, IntPtr lpBuffer, int dwBufferLength);
         public const int INTERNET_OPTION_SETTINGS_CHANGED = 39;
         public const int INTERNET_OPTION_REFRESH = 37;
-        public const string REGISTRY_KEY_IS = "\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings";
+        public const string REGISTRY_KEY_IS = "Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings";
 
         public static void SetProxyState(bool proxyEnabled)
         {
