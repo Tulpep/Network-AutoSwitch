@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Tulpep.NetworkAutoSwitch.UtilityLibrary
+namespace Tulpep.Network.NetworkStateService
 {
     public static class Logging
     {
@@ -10,4 +10,3 @@ namespace Tulpep.NetworkAutoSwitch.UtilityLibrary
         }
     }
 }
-
