@@ -5,7 +5,7 @@ namespace Tulpep.NetworkAutoSwitch.ProxyEnabler
 {
     class Options
     {
-        [Option('e', "enable", HelpText = "'Enable' or 'Disable' proxy.")]
+        [Option('e', "enable", Required = true, HelpText = "'Enable' or 'Disable' proxy.")]
         public int Enable { get; set; }
 
 
