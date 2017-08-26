@@ -105,6 +105,10 @@
       <Project>{9e33f72c-4a08-4081-9a4a-e8ace7a9b7fd}</Project>
       <Name>Tulpep.NetworkAutoSwitch.NetworkStateLibrary</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Tulpep.NetworkAutoSwitch.ProxyEnabler\Tulpep.NetworkAutoSwitch.ProxyEnabler.csproj">
+      <Project>{58560215-dabc-4b54-93d5-89c3db106472}</Project>
+      <Name>Tulpep.NetworkAutoSwitch.ProxyEnabler</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
