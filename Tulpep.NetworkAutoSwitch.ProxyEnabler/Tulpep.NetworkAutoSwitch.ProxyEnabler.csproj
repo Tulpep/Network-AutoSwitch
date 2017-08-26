@@ -7,10 +7,11 @@
     <ProjectGuid>{58560215-DABC-4B54-93D5-89C3DB106472}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>Tulpep.NetworkAutoSwitch.ProxyEnabler</RootNamespace>
-    <AssemblyName>Tulpep.NetworkAutoSwitch.ProxyEnabler</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <AssemblyName>ProxyEnabler</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
