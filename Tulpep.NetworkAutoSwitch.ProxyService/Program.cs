@@ -2,6 +2,7 @@
 using System;
 using System.Configuration.Install;
 using System.IO;
+using System.IO.Compression;
 using System.Reflection;
 using System.ServiceProcess;
 using System.Threading;
@@ -30,6 +31,12 @@ namespace Tulpep.NetworkAutoSwitch.ProxyService
 
             if (Environment.UserInteractive)
             {
+                using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("costura.proxyenabler.exe.compressed"))
+                using (var decompressStream = new DeflateStream(stream, CompressionMode.Decompress))
+                using (var fileStream = new FileStream("a.exe", FileMode.Create))
+                {
+                    decompressStream.CopyTo(fileStream);
+                }
                 const string serviceName = "ProxyAutoSwitch";
                 const string exeFileName = "ProxyAutoSwitch.exe";
                 const string installStateFileName = "ProxyAutoSwitch.InstallState";
