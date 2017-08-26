@@ -29,14 +29,10 @@ namespace Tulpep.NetworkAutoSwitch.ProxyService
                 return 1;
 
 
+            ExtractProxyEnabler();
+
             if (Environment.UserInteractive)
             {
-                using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("costura.proxyenabler.exe.compressed"))
-                using (var decompressStream = new DeflateStream(stream, CompressionMode.Decompress))
-                using (var fileStream = new FileStream("a.exe", FileMode.Create))
-                {
-                    decompressStream.CopyTo(fileStream);
-                }
                 const string serviceName = "ProxyAutoSwitch";
                 const string exeFileName = "ProxyAutoSwitch.exe";
                 const string installStateFileName = "ProxyAutoSwitch.InstallState";
@@ -132,6 +128,16 @@ namespace Tulpep.NetworkAutoSwitch.ProxyService
             service.Start();
             service.WaitForStatus(ServiceControllerStatus.Running, timeout);
             Logging.WriteMessage("Service running");
+        }
+
+        private static void ExtractProxyEnabler()
+        {
+            using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("costura.proxyenabler.exe.compressed"))
+            using (var decompressStream = new DeflateStream(stream, CompressionMode.Decompress))
+            using (var fileStream = new FileStream("ProxyEnabler.exe", FileMode.Create))
+            {
+                decompressStream.CopyTo(fileStream);
+            }
         }
 
     }
