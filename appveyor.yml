@@ -30,6 +30,10 @@ environment:
     secure: UQSh4nfF0+NlaV7tLriphA==
 
 
+before_build:
+  - nuget restore
+
+
 after_build:
   - cmd: '"%sign_tool%" sign /f "%pfx_file%" /p %pfx_password% /t %timestamp_url% "%artifact_path%"'
 
