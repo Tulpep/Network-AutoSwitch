@@ -30,7 +30,7 @@ namespace Tulpep.NetworkAutoSwitch.ProxyEnabler
 
             RegistryKey registry = Registry.CurrentUser.OpenSubKey(REGISTRY_KEY_IS, true);
 
-            registry.SetValue("ProxyEnable", Options.Enable? 1 : 0);
+            registry.SetValue("ProxyEnable", Options.Enable == 1 ? 1 : 0);
 
             InternetSetOption(IntPtr.Zero, INTERNET_OPTION_SETTINGS_CHANGED, IntPtr.Zero, 0);
             InternetSetOption(IntPtr.Zero, INTERNET_OPTION_REFRESH, IntPtr.Zero, 0);
