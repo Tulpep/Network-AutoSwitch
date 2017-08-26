@@ -36,6 +36,9 @@ after_build:
 artifacts:
   - path: '**\bin\Release\NetworkAutoSwitch.exe'
     name: NetworkAutoSwitch.exe
+    
+  - path: '**\bin\Release\ProxyAutoSwitch.exe'
+    name: ProxyAutoSwitch.exe  
 
 deploy:
   release: Network-AutoSwitch $(appveyor_build_version)
