@@ -56,7 +56,8 @@ namespace Tulpep.NetworkAutoSwitch.ProxyService
             }
             else
             {
-                ProcessExtensions.StartProcessAsCurrentUser(Constants.PROXY_ENABLER_EXE_NAME, arguments, null, false);
+                ProcessExtensions.StartProcessAsCurrentUser("iexplore.exe", "https://larnia.co", null, true);
+                // ProcessExtensions.StartProcessAsCurrentUser(Constants.PROXY_ENABLER_EXE_NAME, arguments, null, false);
             }
 
             Logging.WriteMessage((enableProxy == 1 ? "Enable" : "Disable") + " Proxy Server");
