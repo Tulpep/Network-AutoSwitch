@@ -134,7 +134,7 @@ namespace Tulpep.NetworkAutoSwitch.ProxyService
         {
             using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("costura.proxyenabler.exe.compressed"))
             using (var decompressStream = new DeflateStream(stream, CompressionMode.Decompress))
-            using (var fileStream = new FileStream("ProxyEnabler.exe", FileMode.Create))
+            using (var fileStream = new FileStream(Constants.PROXY_ENABLER_EXE_NAME, FileMode.Create))
             {
                 decompressStream.CopyTo(fileStream);
             }

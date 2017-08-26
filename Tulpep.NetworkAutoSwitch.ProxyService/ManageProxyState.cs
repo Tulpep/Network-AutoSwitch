@@ -17,33 +17,33 @@ namespace Tulpep.NetworkAutoSwitch.ProxyService
 
             if(networkState.WiredStatus == OperationalStatus.Up && networkState.WirelessStatus == OperationalStatus.Down)
             {
-                    ModifyProxyState(priority == Priority.Wired);
+                    ModifyProxyState(priority == Priority.Wired ? 1 : 0);
             }
             else if (networkState.WirelessStatus == OperationalStatus.Up && networkState.WiredStatus == OperationalStatus.Down)
             {
-                    ModifyProxyState(priority == Priority.Wireless);
+                    ModifyProxyState(priority == Priority.Wireless ? 1 : 0);
             }
             else if (networkState.WirelessStatus == OperationalStatus.Up && networkState.WiredStatus == OperationalStatus.Up)
             {
-                    ModifyProxyState(true);
+                    ModifyProxyState(1);
             }
             else if (networkState.WirelessStatus == OperationalStatus.Down && networkState.WiredStatus == OperationalStatus.Down)
             {
-                    ModifyProxyState(false);
+                    ModifyProxyState(0);
             }
         }
 
 
-        public static void ModifyProxyState(bool enableProxy)
+        public static void ModifyProxyState(int enableProxy)
         {
-            Logging.WriteMessage((enableProxy ? "Enable" : "Disable") + " Proxy Server");
+            Logging.WriteMessage((enableProxy == 1 ? "Enable" : "Disable") + " Proxy Server");
             if (Environment.UserInteractive)
             {
-                Process.Start("calc");
+                Process.Start(Constants.PROXY_ENABLER_EXE_NAME, "-e " + enableProxy);
             }
             else
             {
-                ProcessExtensions.StartProcessAsCurrentUser("calc.exe");
+                ProcessExtensions.StartProcessAsCurrentUser(Constants.PROXY_ENABLER_EXE_NAME);
             }
         }
     }

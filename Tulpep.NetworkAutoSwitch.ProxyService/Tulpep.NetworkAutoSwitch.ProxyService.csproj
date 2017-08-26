@@ -73,6 +73,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
     <Compile Include="DetectNetworkChanges.cs" />
     <Compile Include="ManageProxyState.cs" />
     <Compile Include="ProcessExtensions.cs" />
