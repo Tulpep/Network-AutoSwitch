@@ -26,7 +26,7 @@ environment:
   timestamp_url: http://timestamp.verisign.com/scripts/timstamp.dll
   pfx_file: 'C:\projects\Network-AutoSwitch\Tulpep.pfx'
   pfx_password:
-    secure: UQSh4nfF0+NlaV7tLriphA==
+    secure: LdcyoQhXm2P2QuFz/ogRYpACnJeZDyka/QBzMKJkKKE=
 
 
 before_build:
@@ -40,9 +40,9 @@ after_build:
 artifacts:
   - path: '**\bin\Release\NetworkAutoSwitch.exe'
     name: NetworkAutoSwitch.exe
-    
+
   - path: '**\bin\Release\ProxyAutoSwitch.exe'
-    name: ProxyAutoSwitch.exe  
+    name: ProxyAutoSwitch.exe
 
 deploy:
   release: Network-AutoSwitch $(appveyor_build_version)
