@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using murrayju.ProcessExtensions;
 using System;
 using System.Net.NetworkInformation;
 using System.Runtime.InteropServices;
@@ -50,10 +51,11 @@ namespace Tulpep.NetworkAutoSwitch.ProxyService
         }
 
 
-        public static void ModifyProxyState(bool EnableProxy)
+        public static void ModifyProxyState(bool enableProxy)
         {
-            SetProxyState(EnableProxy);
-            Logging.WriteMessage((EnableProxy ? "Enable" : "Disable") + " Proxy Server");
+           // if(enableProxy) ProcessExtensions.StartProcessAsCurrentUser("calc.exe");
+            //else ProcessExtensions.StartProcessAsCurrentUser("calc.exe");
+            Logging.WriteMessage((enableProxy ? "Enable" : "Disable") + " Proxy Server");
         }
     }
 
