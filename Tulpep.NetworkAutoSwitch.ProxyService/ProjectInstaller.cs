@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 
-namespace Tulpep.NetworkAutoSwitch.Service
+namespace Tulpep.NetworkAutoSwitch.ProxyService
 {
     [RunInstaller(true)]
     public partial class ProjectInstaller : System.Configuration.Install.Installer
@@ -35,8 +35,5 @@ namespace Tulpep.NetworkAutoSwitch.Service
             base.OnBeforeInstall(savedState);
 
         }
-
     }
-
-
 }

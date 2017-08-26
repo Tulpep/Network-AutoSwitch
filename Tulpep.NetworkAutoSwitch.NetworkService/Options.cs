@@ -1,7 +1,8 @@
 ﻿using CommandLine;
 using CommandLine.Text;
+using Tulpep.NetworkAutoSwitch.NetworkStateLibrary;
 
-namespace Tulpep.NetworkAutoSwitch.Service
+namespace Tulpep.NetworkAutoSwitch.NetworkService
 {
     class Options
     {

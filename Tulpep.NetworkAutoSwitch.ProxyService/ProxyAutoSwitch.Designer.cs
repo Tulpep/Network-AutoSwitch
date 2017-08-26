@@ -1,6 +1,6 @@
-﻿namespace Tulpep.NetworkAutoSwitch.Service
+﻿namespace Tulpep.NetworkAutoSwitch.ProxyService
 {
-    partial class NetworkAutoSwitch
+    partial class ProxyAutoSwitch
     {
         /// <summary> 
         /// Required designer variable.
@@ -32,7 +32,7 @@
             // 
             // NetworkAutoSwitch
             // 
-            this.ServiceName = "Tulpep Network AutoSwitch Service";
+            this.ServiceName = "Tulpep Proxy AutoSwitch Service";
         }
 
         #endregion

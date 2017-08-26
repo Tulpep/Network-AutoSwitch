@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Tulpep.NetworkAutoSwitch.Service
+namespace Tulpep.Network.NetworkStateService
 {
-    static class Logging
+    public static class Logging
     {
         public static void WriteMessage(string text, params object[] args)
         {

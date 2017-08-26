@@ -2,11 +2,14 @@
 using System;
 using System.Configuration.Install;
 using System.IO;
+using System.IO.Compression;
 using System.Reflection;
 using System.ServiceProcess;
 using System.Threading;
+using Tulpep.Network.NetworkStateService;
+using Tulpep.NetworkAutoSwitch.NetworkStateLibrary;
 
-namespace Tulpep.NetworkAutoSwitch.Service
+namespace Tulpep.NetworkAutoSwitch.ProxyService
 {
     static class Program
     {
@@ -26,11 +29,13 @@ namespace Tulpep.NetworkAutoSwitch.Service
                 return 1;
 
 
+            ExtractProxyEnabler();
+
             if (Environment.UserInteractive)
             {
-                const string serviceName = "NetworkAutoSwitch";
-                const string exeFileName = "NetworkAutoSwitch.exe";
-                const string installStateFileName = "NetworkAutoSwitch.InstallState";
+                const string serviceName = "ProxyAutoSwitch";
+                const string exeFileName = "ProxyAutoSwitch.exe";
+                const string installStateFileName = "ProxyAutoSwitch.InstallState";
 
                 string currentPath = Assembly.GetExecutingAssembly().Location;
                 string system32Path = Environment.GetFolderPath(Environment.SpecialFolder.System);
@@ -98,9 +103,9 @@ namespace Tulpep.NetworkAutoSwitch.Service
             }
             else
             {
-                ServiceBase[]  ServicesToRun = new ServiceBase[]
+                ServiceBase[] ServicesToRun = new ServiceBase[]
                 {
-                    new NetworkAutoSwitch()
+                    new ProxyAutoSwitch()
                 };
                 ServiceBase.Run(ServicesToRun);
                 return 0;
@@ -125,5 +130,16 @@ namespace Tulpep.NetworkAutoSwitch.Service
             Logging.WriteMessage("Service running");
         }
 
+        private static void ExtractProxyEnabler()
+        {
+            using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("costura.proxyenabler.exe.compressed"))
+            using (var decompressStream = new DeflateStream(stream, CompressionMode.Decompress))
+            using (var fileStream = new FileStream(Constants.PROXY_ENABLER_EXE_NAME, FileMode.Create))
+            {
+                decompressStream.CopyTo(fileStream);
+            }
+        }
+
     }
 }
+
