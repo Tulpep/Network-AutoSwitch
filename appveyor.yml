@@ -50,7 +50,7 @@ deploy:
   description: ''
   auth_token:
     secure: Q+20Xaui8ng5gVvoMIkb0g4F0oqMZFVOJo4SNRc+KVN91WkjLe5gTMkifCyDZTlE
-  artifact: NetworkAutoSwitch.exe
+  artifact: /.*\.exe/
   draft: false
   prerelease: false
   on:
