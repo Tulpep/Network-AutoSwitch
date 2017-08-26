@@ -36,14 +36,27 @@ namespace Tulpep.NetworkAutoSwitch.ProxyService
 
         public static void ModifyProxyState(int enableProxy)
         {
-            string parameters = "-e " + enableProxy;
+            string arguments = "-e " + enableProxy;
+
+
             if (Environment.UserInteractive)
             {
-                Process.Start(Constants.PROXY_ENABLER_EXE_NAME, parameters);
+                ProcessStartInfo psi = new ProcessStartInfo()
+                {
+                    FileName = Constants.PROXY_ENABLER_EXE_NAME,
+                    Arguments = arguments,
+                    RedirectStandardInput = true,
+                    RedirectStandardOutput = false,
+                    RedirectStandardError = false,
+                    UseShellExecute = false,
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    CreateNoWindow = true,
+                };
+                Process.Start(psi);
             }
             else
             {
-                ProcessExtensions.StartProcessAsCurrentUser(Constants.PROXY_ENABLER_EXE_NAME, parameters);
+                ProcessExtensions.StartProcessAsCurrentUser(Constants.PROXY_ENABLER_EXE_NAME, arguments, null, false);
             }
 
             Logging.WriteMessage((enableProxy == 1 ? "Enable" : "Disable") + " Proxy Server");
