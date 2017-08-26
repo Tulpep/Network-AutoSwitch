@@ -23,7 +23,6 @@ assembly_info:
 
 environment:
   sign_tool: 'C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Bin\signtool.exe'
-  artifact_path: 'C:\projects\network-autoswitch\Tulpep.NetworkAutoSwitch.Service\bin\Release\NetworkAutoSwitch.exe'
   timestamp_url: http://timestamp.verisign.com/scripts/timstamp.dll
   pfx_file: 'C:\projects\Network-AutoSwitch\Tulpep.pfx'
   pfx_password:
@@ -35,7 +34,8 @@ before_build:
 
 
 after_build:
-  - cmd: '"%sign_tool%" sign /f "%pfx_file%" /p %pfx_password% /t %timestamp_url% "%artifact_path%"'
+  - cmd: '"%sign_tool%" sign /f "%pfx_file%" /p %pfx_password% /t %timestamp_url% "C:\projects\network-autoswitch\Tulpep.NetworkAutoSwitch.NetworkService\bin\Release\NetworkAutoSwitch.exe"'
+  - cmd: '"%sign_tool%" sign /f "%pfx_file%" /p %pfx_password% /t %timestamp_url% "C:\projects\network-autoswitch\Tulpep.NetworkAutoSwitch.ProxyService\bin\Release\ProxyAutoSwitch.exe"'
 
 artifacts:
   - path: '**\bin\Release\NetworkAutoSwitch.exe'
