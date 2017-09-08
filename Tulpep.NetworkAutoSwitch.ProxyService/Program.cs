@@ -1,6 +1,7 @@
 ﻿using CommandLine;
 using System;
 using System.Configuration.Install;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Reflection;
@@ -116,6 +117,15 @@ namespace Tulpep.NetworkAutoSwitch.ProxyService
         private static void CurrentDomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             Logging.WriteMessage(e.ExceptionObject.ToString());
+
+            string sSource = "ProxyAutoSwitch";
+            string sEvent = "ProxyAutoSwitch Log Error";
+
+            if (!EventLog.SourceExists(sSource))
+                EventLog.CreateEventSource(sSource, e.ExceptionObject.ToString());
+
+            EventLog.WriteEntry(sSource, sEvent, EventLogEntryType.Error);  
+
             Environment.Exit(1);
         }
 
@@ -139,7 +149,6 @@ namespace Tulpep.NetworkAutoSwitch.ProxyService
                 decompressStream.CopyTo(fileStream);
             }
         }
-
     }
 }
 
