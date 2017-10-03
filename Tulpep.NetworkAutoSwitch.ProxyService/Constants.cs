@@ -8,5 +8,6 @@ namespace Tulpep.NetworkAutoSwitch.ProxyService
     public static class Constants
     {
         public const string PROXY_ENABLER_EXE_NAME = "ProxyEnabler.exe";
+        public const string TXT_CONFIG_NAME = "ProxyAutoSwitchConfig.txt";
     }
 }

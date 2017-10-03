@@ -1,8 +1,10 @@
 ﻿using murrayju.ProcessExtensions;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Management;
 using System.Net.NetworkInformation;
+using System.Reflection;
 using Tulpep.Network.NetworkStateService;
 using Tulpep.NetworkAutoSwitch.NetworkStateLibrary;
 
@@ -12,9 +14,9 @@ namespace Tulpep.NetworkAutoSwitch.ProxyService
     {
         public static void AnalyzeNow(Priority priority)
         {
-
             NetworkState networkState = NetworkStateService.RefreshNetworkState(priority);
-            Logging.WriteMessage("Wireless: {0} | Wired: {1}", networkState.WirelessStatus, networkState.WiredStatus);
+
+            Logging.WriteMessage("Wireless: {0} | Wired: {1} | State: {2}", networkState.WirelessStatus, networkState.WiredStatus, priority);
 
             if (networkState.WiredStatus == OperationalStatus.Up && networkState.WirelessStatus == OperationalStatus.Down)
             {
@@ -26,14 +28,13 @@ namespace Tulpep.NetworkAutoSwitch.ProxyService
             }
             else if (networkState.WirelessStatus == OperationalStatus.Up && networkState.WiredStatus == OperationalStatus.Up)
             {
-                ModifyProxyState(1);
+                ModifyProxyState(priority == Priority.Wired ? 1 : 0);
             }
             else if (networkState.WirelessStatus == OperationalStatus.Down && networkState.WiredStatus == OperationalStatus.Down)
             {
-                ModifyProxyState(0);
+                ModifyProxyState(priority == Priority.Wireless ? 1 : 0);
             }
         }
-
 
         public static void ModifyProxyState(int enableProxy)
         {
@@ -83,6 +84,35 @@ namespace Tulpep.NetworkAutoSwitch.ProxyService
 
             return false;
         }
+
+        public static Priority GetPriorityConfig()
+        {
+            string currentPath = Assembly.GetExecutingAssembly().Location;
+            string system32Path = Environment.GetFolderPath(Environment.SpecialFolder.SystemX86);
+            string configInSystem32Path = Path.Combine(system32Path, Constants.TXT_CONFIG_NAME);
+
+            string firstLine;
+
+            using (StreamReader reader = new StreamReader(configInSystem32Path))
+            {
+                firstLine = reader.ReadLine() ?? "";
+            }
+
+            Priority priority = Priority.None;
+
+            if(firstLine == "1")
+            {
+                priority = Priority.Wired;
+            }
+            else if(firstLine == "0")
+            {
+                priority = Priority.Wireless;
+            }
+
+            return priority;
+        }
+
+
     }
 
 }

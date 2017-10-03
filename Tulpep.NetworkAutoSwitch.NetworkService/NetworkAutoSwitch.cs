@@ -1,5 +1,6 @@
 ﻿using CommandLine;
 using System.ServiceProcess;
+using Tulpep.NetworkAutoSwitch.NetworkStateLibrary;
 
 namespace Tulpep.NetworkAutoSwitch.NetworkService
 {
@@ -17,7 +18,10 @@ namespace Tulpep.NetworkAutoSwitch.NetworkService
         {
             Options = new Options();
             if (Parser.Default.ParseArguments(args, Options))
-                _detectNetworkChanges = new DetectNetworkChanges(Options.Priority);
+            {
+                Priority priority = Options.Priority == Priority.None ? ManageNetworkState.GetPriorityConfig() : Options.Priority;
+                _detectNetworkChanges = new DetectNetworkChanges(priority);
+            }
         }
 
         protected override void OnStop()
