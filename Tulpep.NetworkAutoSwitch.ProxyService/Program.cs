@@ -1,7 +1,6 @@
 ﻿using CommandLine;
 using System;
 using System.Configuration.Install;
-using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Reflection;
@@ -23,21 +22,18 @@ namespace Tulpep.NetworkAutoSwitch.ProxyService
 
         static int Main(string[] args)
         {
-
             AppDomain.CurrentDomain.UnhandledException += CurrentDomainUnhandledException;
-
+            
             Options = new Options();
             if (!Parser.Default.ParseArguments(args, Options))
                 return 1;
 
-
             ExtractProxyEnabler();
 
             if (Environment.UserInteractive)
-            {
-                const string serviceName = "ProxyAutoSwitch";
-                const string exeFileName = "ProxyAutoSwitch.exe";
-                const string installStateFileName = "ProxyAutoSwitch.InstallState";
+            {                
+                const string exeFileName = Constants.SERVICE_NAME + ".exe";
+                const string installStateFileName = Constants.SERVICE_NAME + ".InstallState";
 
                 string currentPath = Assembly.GetExecutingAssembly().Location;
                 string system32Path = Environment.GetFolderPath(Environment.SpecialFolder.System);
@@ -60,7 +56,7 @@ namespace Tulpep.NetworkAutoSwitch.ProxyService
                     }
                     ManagedInstallerClass.InstallHelper(new string[] { "/LogFile=", "/LogToConsole=true", serviceInSystem32Path });
                     Logging.WriteMessage("Service Installed");
-                    StartService(serviceName, 500, Options.Priority);
+                    StartService(Constants.SERVICE_NAME, 500, Options.Priority);
                     return 0;
                 }
                 if (Options.Uninstall)
@@ -117,16 +113,7 @@ namespace Tulpep.NetworkAutoSwitch.ProxyService
 
         private static void CurrentDomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            Logging.WriteMessage(e.ExceptionObject.ToString());
-
-            string sSource = "ProxyAutoSwitch";
-            string sEvent = "ProxyAutoSwitch Log Error";
-
-            if (!EventLog.SourceExists(sSource))
-                EventLog.CreateEventSource(sSource, e.ExceptionObject.ToString());
-
-            EventLog.WriteEntry(sSource, sEvent, EventLogEntryType.Error);  
-
+            Logging.WriteMessageEventViewerError(Constants.SERVICE_NAME, e.ExceptionObject.ToString());
             Environment.Exit(1);
         }
 

@@ -33,7 +33,7 @@ namespace Tulpep.NetworkAutoSwitch.NetworkService
         {
             string currentPath = Assembly.GetExecutingAssembly().Location;
             string system32Path = Environment.GetFolderPath(Environment.SpecialFolder.SystemX86);
-            string configInSystem32Path = Path.Combine(system32Path, "NetworkAutoSwitchConfig.txt");
+            string configInSystem32Path = Path.Combine(system32Path, Constants.SERVICE_NAME + "Config.txt");
 
             string firstLine;
 

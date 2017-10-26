@@ -78,6 +78,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
     <Compile Include="ManageNetworkState.cs" />
     <Compile Include="DetectNetworkChanges.cs" />
     <Compile Include="NetworkAutoSwitch.cs">

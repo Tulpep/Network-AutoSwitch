@@ -39,9 +39,9 @@
             // 
             // serviceInstaller1
             // 
-            this.serviceInstaller1.Description = "For detailed information visit https://github.com/Tulpep/Network-AutoSwitch";
-            this.serviceInstaller1.DisplayName = "Tulpep Network AutoSwitch Service";
-            this.serviceInstaller1.ServiceName = "NetworkAutoSwitch";
+            this.serviceInstaller1.Description = Constants.SERVICE_DESCRIPTION;
+            this.serviceInstaller1.DisplayName = Constants.SERVICE_DISPLAY_NAME;
+            this.serviceInstaller1.ServiceName = Constants.SERVICE_NAME;
             this.serviceInstaller1.StartType = System.ServiceProcess.ServiceStartMode.Automatic;
             // 
             // ProjectInstaller

@@ -21,19 +21,16 @@ namespace Tulpep.NetworkAutoSwitch.NetworkService
 
         static int Main(string[] args)
         {
-
             AppDomain.CurrentDomain.UnhandledException += CurrentDomainUnhandledException;
 
             Options = new Options();
             if (!Parser.Default.ParseArguments(args, Options))
                 return 1;
-
-
+            
             if (Environment.UserInteractive)
             {
-                const string serviceName = "NetworkAutoSwitch";
-                const string exeFileName = "NetworkAutoSwitch.exe";
-                const string installStateFileName = "NetworkAutoSwitch.InstallState";
+                const string exeFileName = Constants.SERVICE_NAME + ".exe";
+                const string installStateFileName = Constants.SERVICE_NAME + ".InstallState";
 
                 string currentPath = Assembly.GetExecutingAssembly().Location;
                 string system32Path = Environment.GetFolderPath(Environment.SpecialFolder.System);
@@ -56,7 +53,7 @@ namespace Tulpep.NetworkAutoSwitch.NetworkService
                     }
                     ManagedInstallerClass.InstallHelper(new string[] { "/LogFile=", "/LogToConsole=true", serviceInSystem32Path });
                     Logging.WriteMessage("Service Installed");
-                    StartService(serviceName, 500, Options.Priority);
+                    StartService(Constants.SERVICE_NAME, 500, Options.Priority);
                     return 0;
                 }
                 if (Options.Uninstall)
@@ -113,7 +110,7 @@ namespace Tulpep.NetworkAutoSwitch.NetworkService
 
         private static void CurrentDomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            Logging.WriteMessageEventViewer(e.ExceptionObject.ToString());
+            Logging.WriteMessageEventViewerError(Constants.SERVICE_NAME, e.ExceptionObject.ToString());
             Environment.Exit(1);
         }
 
@@ -129,7 +126,7 @@ namespace Tulpep.NetworkAutoSwitch.NetworkService
 
             string currentPath = Assembly.GetExecutingAssembly().Location;
             string system32Path = Environment.GetFolderPath(Environment.SpecialFolder.SystemX86);
-            string configInSystem32Path = Path.Combine(system32Path, "NetworkAutoSwitchConfig.txt");
+            string configInSystem32Path = Path.Combine(system32Path, Constants.SERVICE_NAME + "Config.txt");
             Byte[] info = null;
 
             using (FileStream fs = File.Create(configInSystem32Path))
