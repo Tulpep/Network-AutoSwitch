@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Tulpep.NetworkAutoSwitch.ProxyService
+﻿namespace Tulpep.NetworkAutoSwitch.ProxyService
 {
     public static class Constants
     {
@@ -12,6 +7,7 @@ namespace Tulpep.NetworkAutoSwitch.ProxyService
         public const string SERVICE_DESCRIPTION = "For detailed information visit https://github.com/Tulpep/Network-AutoSwitch";
 
         public const string PROXY_ENABLER_EXE_NAME = "ProxyEnabler.exe";
-        public const string TXT_CONFIG_NAME = SERVICE_NAME + "Config.txt";
+        public const string KEY_CONFIG_PATH = @"Software\Tulpep\" + SERVICE_NAME;
+        public const string KEY_CONFIG_NAME = SERVICE_NAME + "Key";
     }
 }

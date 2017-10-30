@@ -1,11 +1,11 @@
 ﻿using CommandLine;
+using Microsoft.Win32;
 using System;
 using System.Configuration.Install;
 using System.IO;
 using System.IO.Compression;
 using System.Reflection;
 using System.ServiceProcess;
-using System.Text;
 using System.Threading;
 using Tulpep.Network.NetworkStateService;
 using Tulpep.NetworkAutoSwitch.NetworkStateLibrary;
@@ -23,7 +23,7 @@ namespace Tulpep.NetworkAutoSwitch.ProxyService
         static int Main(string[] args)
         {
             AppDomain.CurrentDomain.UnhandledException += CurrentDomainUnhandledException;
-            
+
             Options = new Options();
             if (!Parser.Default.ParseArguments(args, Options))
                 return 1;
@@ -31,7 +31,7 @@ namespace Tulpep.NetworkAutoSwitch.ProxyService
             ExtractProxyEnabler();
 
             if (Environment.UserInteractive)
-            {                
+            {
                 const string exeFileName = Constants.SERVICE_NAME + ".exe";
                 const string installStateFileName = Constants.SERVICE_NAME + ".InstallState";
 
@@ -78,6 +78,10 @@ namespace Tulpep.NetworkAutoSwitch.ProxyService
                             File.Delete(installStatePath);
                         }
                     }
+                    using (RegistryKey hkcu = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64))
+                    {
+                        hkcu.DeleteSubKeyTree(Constants.KEY_CONFIG_PATH);
+                    }
                     return 0;
                 }
 
@@ -88,7 +92,8 @@ namespace Tulpep.NetworkAutoSwitch.ProxyService
                     return 1;
                 }
                 var exitEvent = new ManualResetEvent(false);
-                Console.CancelKeyPress += (sender, eventArgs) => {
+                Console.CancelKeyPress += (sender, eventArgs) =>
+                {
                     eventArgs.Cancel = true;
                     exitEvent.Set();
                 };
@@ -126,17 +131,14 @@ namespace Tulpep.NetworkAutoSwitch.ProxyService
             service.Start(new string[] { "-p", priority.ToString() });
             service.WaitForStatus(ServiceControllerStatus.Running, timeout);
             Logging.WriteMessage("Service running");
-
-            string currentPath = Assembly.GetExecutingAssembly().Location;
-            string system32Path = Environment.GetFolderPath(Environment.SpecialFolder.SystemX86);
-            string configInSystem32Path = Path.Combine(system32Path, Constants.TXT_CONFIG_NAME);
-            Byte[] info = null;
-
-            using (FileStream fs = File.Create(configInSystem32Path))
+            
+            using (RegistryKey hkcu = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64))
             {
-                info = new UTF8Encoding(true).GetBytes(priority == Priority.Wired ? "1" : "0");
-                fs.Write(info, 0, info.Length);
-
+                using (RegistryKey proxyAutoSwitch = hkcu.CreateSubKey(Constants.KEY_CONFIG_PATH, RegistryKeyPermissionCheck.Default))
+                {
+                    string config = priority == Priority.Wired ? Decimal.One.ToString() : Decimal.Zero.ToString();
+                    proxyAutoSwitch.SetValue(Constants.KEY_CONFIG_NAME, config, RegistryValueKind.String);
+                }
             }
         }
 

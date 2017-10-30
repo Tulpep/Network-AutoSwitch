@@ -1,10 +1,9 @@
-﻿using murrayju.ProcessExtensions;
+﻿using Microsoft.Win32;
+using murrayju.ProcessExtensions;
 using System;
 using System.Diagnostics;
-using System.IO;
 using System.Management;
 using System.Net.NetworkInformation;
-using System.Reflection;
 using Tulpep.Network.NetworkStateService;
 using Tulpep.NetworkAutoSwitch.NetworkStateLibrary;
 
@@ -87,32 +86,28 @@ namespace Tulpep.NetworkAutoSwitch.ProxyService
 
         public static Priority GetPriorityConfig()
         {
-            string currentPath = Assembly.GetExecutingAssembly().Location;
-            string system32Path = Environment.GetFolderPath(Environment.SpecialFolder.SystemX86);
-            string configInSystem32Path = Path.Combine(system32Path, Constants.TXT_CONFIG_NAME);
+            string firstLine = string.Empty;
 
-            string firstLine;
-
-            using (StreamReader reader = new StreamReader(configInSystem32Path))
+            using (RegistryKey hkcu = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64))
             {
-                firstLine = reader.ReadLine() ?? "";
+                using (RegistryKey proxyAutoSwitch = hkcu.CreateSubKey(Constants.KEY_CONFIG_PATH, RegistryKeyPermissionCheck.Default))
+                {
+                    firstLine = proxyAutoSwitch.GetValue(Constants.KEY_CONFIG_NAME)?.ToString();
+                }
             }
-
+            
             Priority priority = Priority.None;
 
-            if(firstLine == "1")
+            if(firstLine.Equals(Decimal.One.ToString()))
             {
                 priority = Priority.Wired;
             }
-            else if(firstLine == "0")
+            else if(firstLine.Equals(Decimal.Zero.ToString()))
             {
                 priority = Priority.Wireless;
             }
-
             return priority;
         }
-
-
     }
 
 }
