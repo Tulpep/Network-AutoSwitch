@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Tulpep.Network.NetworkStateService")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Detailed information at https://github.com/Tulpep/Network-AutoSwitch")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Tulpep")]
 [assembly: AssemblyProduct("Tulpep.Network.NetworkStateService")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]

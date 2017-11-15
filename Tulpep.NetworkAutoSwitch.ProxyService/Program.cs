@@ -1,4 +1,5 @@
 ﻿using CommandLine;
+using Microsoft.Win32;
 using System;
 using System.Configuration.Install;
 using System.IO;
@@ -21,21 +22,18 @@ namespace Tulpep.NetworkAutoSwitch.ProxyService
 
         static int Main(string[] args)
         {
-
             AppDomain.CurrentDomain.UnhandledException += CurrentDomainUnhandledException;
 
             Options = new Options();
             if (!Parser.Default.ParseArguments(args, Options))
                 return 1;
 
-
             ExtractProxyEnabler();
 
             if (Environment.UserInteractive)
             {
-                const string serviceName = "ProxyAutoSwitch";
-                const string exeFileName = "ProxyAutoSwitch.exe";
-                const string installStateFileName = "ProxyAutoSwitch.InstallState";
+                const string exeFileName = Constants.SERVICE_NAME + ".exe";
+                const string installStateFileName = Constants.SERVICE_NAME + ".InstallState";
 
                 string currentPath = Assembly.GetExecutingAssembly().Location;
                 string system32Path = Environment.GetFolderPath(Environment.SpecialFolder.System);
@@ -58,7 +56,7 @@ namespace Tulpep.NetworkAutoSwitch.ProxyService
                     }
                     ManagedInstallerClass.InstallHelper(new string[] { "/LogFile=", "/LogToConsole=true", serviceInSystem32Path });
                     Logging.WriteMessage("Service Installed");
-                    StartService(serviceName, 500);
+                    StartService(Constants.SERVICE_NAME, 500, Options.Priority);
                     return 0;
                 }
                 if (Options.Uninstall)
@@ -80,6 +78,10 @@ namespace Tulpep.NetworkAutoSwitch.ProxyService
                             File.Delete(installStatePath);
                         }
                     }
+                    using (RegistryKey hkcu = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64))
+                    {
+                        hkcu.DeleteSubKeyTree(Constants.KEY_CONFIG_PATH);
+                    }
                     return 0;
                 }
 
@@ -90,7 +92,8 @@ namespace Tulpep.NetworkAutoSwitch.ProxyService
                     return 1;
                 }
                 var exitEvent = new ManualResetEvent(false);
-                Console.CancelKeyPress += (sender, eventArgs) => {
+                Console.CancelKeyPress += (sender, eventArgs) =>
+                {
                     eventArgs.Cancel = true;
                     exitEvent.Set();
                 };
@@ -115,19 +118,28 @@ namespace Tulpep.NetworkAutoSwitch.ProxyService
 
         private static void CurrentDomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            Logging.WriteMessage(e.ExceptionObject.ToString());
+            Logging.WriteMessageEventViewerError(Constants.SERVICE_NAME, e.ExceptionObject.ToString());
             Environment.Exit(1);
         }
 
 
-        private static void StartService(string serviceName, int timeoutMilliseconds)
+        private static void StartService(string serviceName, int timeoutMilliseconds, Priority priority)
         {
             Logging.WriteMessage("Starting Windows Service {0} with timeout of {1} ms", serviceName, timeoutMilliseconds);
             ServiceController service = new ServiceController(serviceName);
             TimeSpan timeout = TimeSpan.FromMilliseconds(timeoutMilliseconds);
-            service.Start();
+            service.Start(new string[] { "-p", priority.ToString() });
             service.WaitForStatus(ServiceControllerStatus.Running, timeout);
             Logging.WriteMessage("Service running");
+            
+            using (RegistryKey hkcu = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64))
+            {
+                using (RegistryKey proxyAutoSwitch = hkcu.CreateSubKey(Constants.KEY_CONFIG_PATH, RegistryKeyPermissionCheck.Default))
+                {
+                    string config = priority == Priority.Wired ? Decimal.One.ToString() : Decimal.Zero.ToString();
+                    proxyAutoSwitch.SetValue(Constants.KEY_CONFIG_NAME, config, RegistryValueKind.String);
+                }
+            }
         }
 
         private static void ExtractProxyEnabler()
@@ -139,6 +151,7 @@ namespace Tulpep.NetworkAutoSwitch.ProxyService
                 decompressStream.CopyTo(fileStream);
             }
         }
+
 
     }
 }

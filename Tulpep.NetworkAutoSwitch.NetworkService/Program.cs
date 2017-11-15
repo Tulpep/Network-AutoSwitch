@@ -4,6 +4,7 @@ using System.Configuration.Install;
 using System.IO;
 using System.Reflection;
 using System.ServiceProcess;
+using System.Text;
 using System.Threading;
 using Tulpep.Network.NetworkStateService;
 using Tulpep.NetworkAutoSwitch.NetworkStateLibrary;
@@ -20,19 +21,16 @@ namespace Tulpep.NetworkAutoSwitch.NetworkService
 
         static int Main(string[] args)
         {
-
             AppDomain.CurrentDomain.UnhandledException += CurrentDomainUnhandledException;
 
             Options = new Options();
             if (!Parser.Default.ParseArguments(args, Options))
                 return 1;
-
-
+            
             if (Environment.UserInteractive)
             {
-                const string serviceName = "NetworkAutoSwitch";
-                const string exeFileName = "NetworkAutoSwitch.exe";
-                const string installStateFileName = "NetworkAutoSwitch.InstallState";
+                const string exeFileName = Constants.SERVICE_NAME + ".exe";
+                const string installStateFileName = Constants.SERVICE_NAME + ".InstallState";
 
                 string currentPath = Assembly.GetExecutingAssembly().Location;
                 string system32Path = Environment.GetFolderPath(Environment.SpecialFolder.System);
@@ -55,7 +53,7 @@ namespace Tulpep.NetworkAutoSwitch.NetworkService
                     }
                     ManagedInstallerClass.InstallHelper(new string[] { "/LogFile=", "/LogToConsole=true", serviceInSystem32Path });
                     Logging.WriteMessage("Service Installed");
-                    StartService(serviceName, 500);
+                    StartService(Constants.SERVICE_NAME, 500, Options.Priority);
                     return 0;
                 }
                 if (Options.Uninstall)
@@ -112,19 +110,31 @@ namespace Tulpep.NetworkAutoSwitch.NetworkService
 
         private static void CurrentDomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            Logging.WriteMessage(e.ExceptionObject.ToString());
+            Logging.WriteMessageEventViewerError(Constants.SERVICE_NAME, e.ExceptionObject.ToString());
             Environment.Exit(1);
         }
 
 
-        private static void StartService(string serviceName, int timeoutMilliseconds)
+        private static void StartService(string serviceName, int timeoutMilliseconds, Priority priority)
         {
             Logging.WriteMessage("Starting Windows Service {0} with timeout of {1} ms", serviceName, timeoutMilliseconds);
             ServiceController service = new ServiceController(serviceName);
             TimeSpan timeout = TimeSpan.FromMilliseconds(timeoutMilliseconds);
-            service.Start();
+            service.Start(new string[] { "-p", priority.ToString() });
             service.WaitForStatus(ServiceControllerStatus.Running, timeout);
             Logging.WriteMessage("Service running");
+
+            string currentPath = Assembly.GetExecutingAssembly().Location;
+            string system32Path = Environment.GetFolderPath(Environment.SpecialFolder.SystemX86);
+            string configInSystem32Path = Path.Combine(system32Path, Constants.SERVICE_NAME + "Config.txt");
+            Byte[] info = null;
+
+            using (FileStream fs = File.Create(configInSystem32Path))
+            {
+                info = new UTF8Encoding(true).GetBytes(priority == Priority.Wired ? "1" : "0");
+                fs.Write(info, 0, info.Length);
+
+            }
         }
 
     }

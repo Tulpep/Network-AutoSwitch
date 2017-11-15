@@ -33,6 +33,7 @@
             // NetworkAutoSwitch
             // 
             this.ServiceName = "Tulpep Proxy AutoSwitch Service";
+            this.CanHandleSessionChangeEvent = true;
         }
 
         #endregion
