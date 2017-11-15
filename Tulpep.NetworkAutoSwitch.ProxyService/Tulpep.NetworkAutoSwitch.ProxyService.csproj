@@ -109,6 +109,7 @@
     <ProjectReference Include="..\Tulpep.NetworkAutoSwitch.ProxyEnabler\Tulpep.NetworkAutoSwitch.ProxyEnabler.csproj">
       <Project>{58560215-dabc-4b54-93d5-89c3db106472}</Project>
       <Name>Tulpep.NetworkAutoSwitch.ProxyEnabler</Name>
+      <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
