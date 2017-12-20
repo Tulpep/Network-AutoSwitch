@@ -2,8 +2,10 @@
 using Microsoft.Win32;
 using System;
 using System.Configuration.Install;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Reflection;
 using System.ServiceProcess;
 using System.Threading;
@@ -15,6 +17,11 @@ namespace Tulpep.NetworkAutoSwitch.ProxyService
     static class Program
     {
         static Options Options { get; set; }
+
+        private static string currentPath = Assembly.GetExecutingAssembly().Location;
+        private static string system32Path = Environment.GetFolderPath(Environment.SpecialFolder.SystemX86);
+        private static string serviceInSystem32Path = Path.Combine(system32Path, Constants.EXE_FILE_NAME);
+        private static bool runningFromSystem32 = string.Equals(currentPath, serviceInSystem32Path, StringComparison.OrdinalIgnoreCase);
 
         /// <summary>
         /// The main entry point for the application.
@@ -32,62 +39,34 @@ namespace Tulpep.NetworkAutoSwitch.ProxyService
 
             if (Environment.UserInteractive)
             {
-                const string exeFileName = Constants.SERVICE_NAME + ".exe";
-                const string installStateFileName = Constants.SERVICE_NAME + ".InstallState";
-
-                string currentPath = Assembly.GetExecutingAssembly().Location;
-                string system32Path = Environment.GetFolderPath(Environment.SpecialFolder.System);
-                string serviceInSystem32Path = Path.Combine(system32Path, exeFileName);
-                bool runningFromSystem32 = string.Equals(currentPath, serviceInSystem32Path, StringComparison.OrdinalIgnoreCase);
-                Logging.WriteMessage("Starting from " + currentPath);
+                Logging.WriteConsoleMessage("Starting from " + currentPath);
                 if (Options.Install)
                 {
                     if (Options.Priority == Priority.None)
                     {
-                        Logging.WriteMessage("You must select a priority");
+                        Logging.WriteConsoleMessage("You must select a priority");
                         Console.WriteLine(Options.GetUsage());
                         return 1;
                     }
-                    if (runningFromSystem32) Logging.WriteMessage("The file is located in {0}, you can not delete it from there after the service installation", currentPath);
-                    else
+                    ServiceController ctl = ServiceController.GetServices().FirstOrDefault(s => s.ServiceName == Constants.SERVICE_NAME);
+                    if (ctl != null)
                     {
-                        Logging.WriteMessage("Copying file to " + serviceInSystem32Path);
-                        File.Copy(currentPath, serviceInSystem32Path, true);
+                        Uninstall();
+                        Install();
                     }
-                    ManagedInstallerClass.InstallHelper(new string[] { "/LogFile=", "/LogToConsole=true", serviceInSystem32Path });
-                    Logging.WriteMessage("Service Installed");
-                    StartService(Constants.SERVICE_NAME, 500, Options.Priority);
+                    else
+                        Install();
                     return 0;
                 }
                 if (Options.Uninstall)
                 {
-                    ManagedInstallerClass.InstallHelper(new string[] { "/uninstall", "/LogFile=", "/LogToConsole=true", Assembly.GetExecutingAssembly().Location });
-                    Logging.WriteMessage("Service Uninstalled");
-                    if (!runningFromSystem32)
-                    {
-                        if (File.Exists(serviceInSystem32Path))
-                        {
-                            Logging.WriteMessage("Removing file from " + serviceInSystem32Path);
-                            File.Delete(serviceInSystem32Path);
-                        }
-
-                        string installStatePath = Path.Combine(system32Path, installStateFileName);
-                        if (File.Exists(installStatePath))
-                        {
-                            Logging.WriteMessage("Removing file from " + installStatePath);
-                            File.Delete(installStatePath);
-                        }
-                    }
-                    using (RegistryKey hkcu = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64))
-                    {
-                        hkcu.DeleteSubKeyTree(Constants.KEY_CONFIG_PATH);
-                    }
+                    Uninstall();
                     return 0;
                 }
 
                 if (Options.Priority == Priority.None)
                 {
-                    Logging.WriteMessage("No priority is selected.");
+                    Logging.WriteConsoleMessage("No priority is selected.");
                     Console.WriteLine(Options.GetUsage());
                     return 1;
                 }
@@ -125,12 +104,12 @@ namespace Tulpep.NetworkAutoSwitch.ProxyService
 
         private static void StartService(string serviceName, int timeoutMilliseconds, Priority priority)
         {
-            Logging.WriteMessage("Starting Windows Service {0} with timeout of {1} ms", serviceName, timeoutMilliseconds);
+            Logging.WriteConsoleMessage("Starting Windows Service {0} with timeout of {1} ms", serviceName, timeoutMilliseconds);
             ServiceController service = new ServiceController(serviceName);
             TimeSpan timeout = TimeSpan.FromMilliseconds(timeoutMilliseconds);
             service.Start(new string[] { "-p", priority.ToString() });
             service.WaitForStatus(ServiceControllerStatus.Running, timeout);
-            Logging.WriteMessage("Service running");
+            Logging.WriteConsoleMessage("Service running");
             
             using (RegistryKey hkcu = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64))
             {
@@ -151,8 +130,67 @@ namespace Tulpep.NetworkAutoSwitch.ProxyService
                 decompressStream.CopyTo(fileStream);
             }
         }
+        
+        private static void SetRecoveryOptions(string SERVICE_NAME)
+        {
+            int exitCode;
+            using (var process = new Process())
+            {
+                var startInfo = process.StartInfo;
+                startInfo.FileName = "sc";
+                startInfo.WindowStyle = ProcessWindowStyle.Hidden;
 
+                // tell Windows that the service should restart if it fails
+                startInfo.Arguments = string.Format("failure \"{0}\" reset= 0 actions= restart/60000", SERVICE_NAME);
 
+                process.Start();
+                process.WaitForExit();
+
+                exitCode = process.ExitCode;
+            }
+
+            if (exitCode != 0)
+                throw new InvalidOperationException();
+        }
+
+        private static void Install()
+        {
+            if (runningFromSystem32) Logging.WriteConsoleMessage("The file is located in {0}, you can not delete it from there after the service installation", currentPath);
+            else
+            {
+                Logging.WriteConsoleMessage("Copying file to " + serviceInSystem32Path);
+                File.Copy(currentPath, serviceInSystem32Path, true);
+            }
+            ManagedInstallerClass.InstallHelper(new string[] { "/LogFile=", "/LogToConsole=true", serviceInSystem32Path });
+            Logging.WriteConsoleMessage("Service Installed");
+            StartService(Constants.SERVICE_NAME, 500, Options.Priority);
+            SetRecoveryOptions(Constants.SERVICE_NAME);
+        }
+
+        private static void Uninstall()
+        {
+            ManagedInstallerClass.InstallHelper(new string[] { "/uninstall", "/LogFile=", "/LogToConsole=true", Assembly.GetExecutingAssembly().Location });
+            Logging.WriteConsoleMessage("Service Uninstalled");
+            if (!runningFromSystem32)
+            {
+                if (File.Exists(serviceInSystem32Path))
+                {
+                    Logging.WriteConsoleMessage("Removing file from " + serviceInSystem32Path);
+                    File.Delete(serviceInSystem32Path);
+                }
+
+                string installStatePath = Path.Combine(system32Path, Constants.INSTALL_STATE_FILE_NAME);
+                if (File.Exists(installStatePath))
+                {
+                    Logging.WriteConsoleMessage("Removing file from " + installStatePath);
+                    File.Delete(installStatePath);
+                }
+            }
+            using (RegistryKey hkcu = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64))
+            {
+                hkcu.DeleteSubKeyTree(Constants.KEY_CONFIG_PATH);
+            }
+        }
     }
 }
 

@@ -12,7 +12,7 @@ namespace Tulpep.NetworkAutoSwitch.NetworkService
         public static void AnalyzeNow(Priority priority)
         {
             NetworkState networkState = NetworkStateService.RefreshNetworkState(priority);
-            Logging.WriteMessage("Wireless: {0} | Wired: {1}", networkState.WirelessStatus, networkState.WiredStatus);
+            Logging.WriteConsoleMessage("Wireless: {0} | Wired: {1}", networkState.WirelessStatus, networkState.WiredStatus);
             if (networkState.WirelessStatus == OperationalStatus.Up && networkState.WiredStatus == OperationalStatus.Up)
             {
                 NetworkStateService.ChangeNicState(networkState.WirelessAdapters, priority == Priority.Wireless ? true : false);

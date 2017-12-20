@@ -20,7 +20,7 @@ namespace Tulpep.NetworkAutoSwitch.NetworkService
 
         public void StopNow()
         {
-            Logging.WriteMessage("Exiting now");
+            Logging.WriteConsoleMessage("Exiting now");
             NetworkStateService.EnableAllNics();
         }
 

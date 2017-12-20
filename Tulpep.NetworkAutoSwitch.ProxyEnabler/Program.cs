@@ -41,7 +41,7 @@ namespace Tulpep.NetworkAutoSwitch.ProxyEnabler
 
         private static void CurrentDomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            Logging.WriteMessage(e.ExceptionObject.ToString());
+            Logging.WriteConsoleMessage(e.ExceptionObject.ToString());
             Environment.Exit(1);
         }
 

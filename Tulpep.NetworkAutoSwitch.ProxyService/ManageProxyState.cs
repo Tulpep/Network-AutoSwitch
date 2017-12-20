@@ -15,7 +15,7 @@ namespace Tulpep.NetworkAutoSwitch.ProxyService
         {
             NetworkState networkState = NetworkStateService.RefreshNetworkState(priority);
 
-            Logging.WriteMessage("Wireless: {0} | Wired: {1} | State: {2}", networkState.WirelessStatus, networkState.WiredStatus, priority);
+            Logging.WriteConsoleMessage("Wireless: {0} | Wired: {1} | State: {2}", networkState.WirelessStatus, networkState.WiredStatus, priority);
 
             if (networkState.WiredStatus == OperationalStatus.Up && networkState.WirelessStatus == OperationalStatus.Down)
             {
@@ -60,7 +60,7 @@ namespace Tulpep.NetworkAutoSwitch.ProxyService
                 ProcessExtensions.StartProcessAsCurrentUser(Constants.PROXY_ENABLER_EXE_NAME, Constants.PROXY_ENABLER_EXE_NAME + " " + arguments, null, false);
             }
 
-            Logging.WriteMessage((enableProxy == 1 ? "Enable" : "Disable") + " Proxy Server");
+            Logging.WriteConsoleMessage((enableProxy == 1 ? "Enable" : "Disable") + " Proxy Server");
         }
 
         private static bool  CheckActiveSessions(){
@@ -98,14 +98,26 @@ namespace Tulpep.NetworkAutoSwitch.ProxyService
             
             Priority priority = Priority.None;
 
-            if(firstLine.Equals(Decimal.One.ToString()))
+            if (firstLine == null)
             {
-                priority = Priority.Wired;
+                Logging.WriteMessageEventViewerError(Constants.SERVICE_NAME, "RegistryKey not found " + Constants.KEY_CONFIG_PATH + Constants.KEY_CONFIG_NAME);
             }
-            else if(firstLine.Equals(Decimal.Zero.ToString()))
+            else
             {
-                priority = Priority.Wireless;
+                if(firstLine.Equals(Decimal.Zero.ToString()))
+                {
+                    Logging.WriteMessageEventViewerWarning(Constants.SERVICE_NAME, $"RegistryKey set in zero {Constants.KEY_CONFIG_PATH + Constants.KEY_CONFIG_NAME}, please set a value" );
+                }
+                else if (firstLine.Equals(Decimal.One.ToString()))
+                {
+                    priority = Priority.Wired;
+                }
+                else if(firstLine.Equals(Decimal.Zero.ToString()))
+                {
+                    priority = Priority.Wireless;
+                }
             }
+
             return priority;
         }
     }

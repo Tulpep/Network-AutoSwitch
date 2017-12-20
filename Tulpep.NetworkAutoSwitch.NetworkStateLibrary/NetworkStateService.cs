@@ -49,7 +49,7 @@ namespace Tulpep.NetworkAutoSwitch.NetworkStateLibrary
         public static void LogChangeStateAdapter(string nicName, bool enable)
         {
             string action = enable ? "Enabling " : "Disabling ";
-            Logging.WriteMessage(action + nicName);
+            Logging.WriteConsoleMessage(action + nicName);
         }
 
         public static void ChangeNicState(string interfaceName, bool enable)

@@ -20,7 +20,7 @@ namespace Tulpep.NetworkAutoSwitch.ProxyService
 
         public void StopNow()
         {
-            Logging.WriteMessage("Exiting now");
+            Logging.WriteConsoleMessage("Exiting now");
         }
 
     }
