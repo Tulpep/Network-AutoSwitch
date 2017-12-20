@@ -157,4 +157,4 @@ $RECYCLE.BIN/
 
 #Roslyn files
 *.sln.ide
-/.vs/
+.vs
