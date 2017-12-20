@@ -110,22 +110,6 @@ namespace Tulpep.NetworkAutoSwitch.ProxyService
             service.Start(new string[] { "-p", priority.ToString() });
             service.WaitForStatus(ServiceControllerStatus.Running, timeout);
             Logging.WriteConsoleMessage("Service running");
-
-            try
-            {
-                using (RegistryKey hkcu = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64))
-                {
-                    using (RegistryKey proxyAutoSwitch = hkcu.CreateSubKey(Constants.KEY_CONFIG_PATH, RegistryKeyPermissionCheck.Default))
-                    {
-                        string config = priority == Priority.Wired ? Decimal.One.ToString() : Decimal.Zero.ToString();
-                        proxyAutoSwitch.SetValue(Constants.KEY_CONFIG_NAME, config, RegistryValueKind.String);
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                Logging.WriteMessageEventViewerError(Constants.SERVICE_NAME, e.Message);
-            }
         }
 
         private static void ExtractProxyEnabler()
@@ -169,6 +153,24 @@ namespace Tulpep.NetworkAutoSwitch.ProxyService
                 File.Copy(currentPath, serviceInSystem32Path, true);
             }
             ManagedInstallerClass.InstallHelper(new string[] { "/LogFile=", "/LogToConsole=true", serviceInSystem32Path });
+
+            Logging.WriteConsoleMessage("Writting registry key");
+            try
+            {
+                using (RegistryKey hkcu = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64))
+                {
+                    using (RegistryKey proxyAutoSwitch = hkcu.CreateSubKey(Constants.KEY_CONFIG_PATH, RegistryKeyPermissionCheck.Default))
+                    {
+                        string config = Options.Priority == Priority.Wired ? Decimal.One.ToString() : Decimal.Zero.ToString();
+                        proxyAutoSwitch.SetValue(Constants.KEY_CONFIG_NAME, config, RegistryValueKind.String);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Logging.WriteMessageEventViewerError(Constants.SERVICE_NAME, e.Message);
+            }
+
             Logging.WriteConsoleMessage("Service Installed");
             StartService(Constants.SERVICE_NAME, 500, Options.Priority);
             SetRecoveryOptions(Constants.SERVICE_NAME);
