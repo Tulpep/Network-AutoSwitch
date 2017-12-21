@@ -39,6 +39,9 @@ namespace Tulpep.NetworkAutoSwitch.ProxyService
 
             if (Environment.UserInteractive)
             {
+#if DEBUG
+                Console.ReadLine();
+#endif
                 Logging.WriteConsoleMessage("Starting from " + currentPath);
                 if (Options.Install)
                 {
@@ -121,13 +124,13 @@ namespace Tulpep.NetworkAutoSwitch.ProxyService
                 decompressStream.CopyTo(fileStream);
             }
         }
-        
+
         private static void SetRecoveryOptions(string SERVICE_NAME)
         {
             int exitCode;
             using (var process = new Process())
             {
-                var startInfo = process.StartInfo;
+                ProcessStartInfo startInfo = process.StartInfo;
                 startInfo.FileName = "sc";
                 startInfo.WindowStyle = ProcessWindowStyle.Hidden;
 
